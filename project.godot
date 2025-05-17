@@ -12,10 +12,14 @@ config_version=5
 
 config/name="Delta Battle"
 config/description="A recreation of Deltarune's combat system in Godot (https://github.com/DevPoodle/delta-battle)"
-run/main_scene="uid://q74ob373rl0j"
+run/main_scene="uid://b53ljrv0fb6u4"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout=""
 
 [autoload]
 
@@ -27,6 +31,10 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
+
+[gui]
+
+theme/custom="uid://tefd5wwqiati"
 
 [input]
 

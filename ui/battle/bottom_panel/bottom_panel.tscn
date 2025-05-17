@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh7u53yj0xavd"]
+
+[ext_resource type="PackedScene" uid="uid://c5cnxltgwop68" path="res://ui/text_box/text_box.tscn" id="1_sd2ip"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7giy0"]
+content_margin_top = 9.0
+
+[node name="BottomPanel" type="Node2D"]
+
+[node name="TextBox" parent="." instance=ExtResource("1_sd2ip")]
+custom_minimum_size = Vector2(640, 115)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7giy0")
+text = "  * This is sample text...
+  * This is sample text...
+  * This isn't sample text, it's real."

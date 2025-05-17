@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b53ljrv0fb6u4"]
+
+[ext_resource type="PackedScene" uid="uid://dh7u53yj0xavd" path="res://ui/battle/bottom_panel/bottom_panel.tscn" id="1_7gynk"]
+
+[node name="Battle" type="Node2D"]
+
+[node name="BottomPanel" parent="." instance=ExtResource("1_7gynk")]
+position = Vector2(0, 365)
