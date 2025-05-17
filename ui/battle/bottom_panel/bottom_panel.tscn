@@ -1,11 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://dh7u53yj0xavd"]
+[gd_scene load_steps=6 format=3 uid="uid://dh7u53yj0xavd"]
 
+[ext_resource type="Script" uid="uid://dexbpui8jgwli" path="res://ui/battle/bottom_panel/bottom_panel.gd" id="1_11je6"]
 [ext_resource type="PackedScene" uid="uid://c5cnxltgwop68" path="res://ui/text_box/text_box.tscn" id="1_sd2ip"]
+[ext_resource type="Texture2D" uid="uid://dal405pbtoeo7" path="res://ui/battle/bottom_panel/res/divider.png" id="2_jbo83"]
+[ext_resource type="PackedScene" uid="uid://bd2jy3sq4c58u" path="res://ui/battle/char_menu/char_menu.tscn" id="3_rmodj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7giy0"]
 content_margin_top = 9.0
 
 [node name="BottomPanel" type="Node2D"]
+script = ExtResource("1_11je6")
 
 [node name="TextBox" parent="." instance=ExtResource("1_sd2ip")]
 custom_minimum_size = Vector2(640, 115)
@@ -13,3 +17,10 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_7giy0")
 text = "  * This is sample text...
   * This is sample text...
   * This isn't sample text, it's real."
+
+[node name="Divider" type="Sprite2D" parent="."]
+position = Vector2(320, -20)
+texture = ExtResource("2_jbo83")
+
+[node name="CharMenu" parent="." instance=ExtResource("3_rmodj")]
+position = Vector2(212, -39)
