@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://bd2jy3sq4c58u"]
+[gd_scene load_steps=13 format=3 uid="uid://bd2jy3sq4c58u"]
 
 [ext_resource type="Script" uid="uid://il0gaqwbwkjg" path="res://ui/battle/char_menu/char_menu.gd" id="1_1ln4u"]
 [ext_resource type="Texture2D" uid="uid://b6vlddkq2yji4" path="res://ui/battle/char_menu/res/hp_static.png" id="1_g0hy4"]
 [ext_resource type="FontFile" uid="uid://dln4jdnfh0rd6" path="res://ui/theme/fonts/hp_numbers/hp_numbers.png" id="2_655sv"]
+[ext_resource type="PackedScene" uid="uid://bcd7akq4n0wp" path="res://ui/battle/char_menu/char_menu_button/char_menu_button.tscn" id="2_an0ot"]
 [ext_resource type="FontFile" uid="uid://q7kjkfbse6t8" path="res://ui/theme/fonts/character_names/character_names.png" id="3_m76r4"]
 [ext_resource type="Texture2D" uid="uid://bji54nmvqt6id" path="res://ui/battle/char_menu/res/sample_char_icon.png" id="4_lgnlm"]
 
@@ -30,18 +31,52 @@ bg_color = Color(1, 1, 1, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ln4u"]
 bg_color = Color(0, 0, 0, 1)
 
-[node name="CharMenu" type="Node2D"]
+[node name="CharMenu" type="Control"]
+custom_minimum_size = Vector2(212, 36)
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_1ln4u")
 
 [node name="Actions" type="Panel" parent="."]
 custom_minimum_size = Vector2(210, 32)
+layout_mode = 0
 offset_top = 4.0
 offset_right = 212.0
 offset_bottom = 36.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cp84r")
 
+[node name="Attack" parent="Actions" instance=ExtResource("2_an0ot")]
+position = Vector2(30, 16)
+
+[node name="Act" parent="Actions" instance=ExtResource("2_an0ot")]
+position = Vector2(65, 16)
+region_rect = Rect2(31, 0, 31, 26)
+sprite = 1
+
+[node name="Magic" parent="Actions" instance=ExtResource("2_an0ot")]
+visible = false
+position = Vector2(65, 16)
+region_rect = Rect2(62, 0, 31, 26)
+sprite = 2
+
+[node name="Item" parent="Actions" instance=ExtResource("2_an0ot")]
+position = Vector2(100, 16)
+region_rect = Rect2(93, 0, 31, 26)
+sprite = 3
+
+[node name="Spare" parent="Actions" instance=ExtResource("2_an0ot")]
+position = Vector2(135, 16)
+region_rect = Rect2(124, 0, 31, 26)
+sprite = 4
+
+[node name="Defend" parent="Actions" instance=ExtResource("2_an0ot")]
+position = Vector2(170, 16)
+region_rect = Rect2(155, 0, 31, 26)
+sprite = 5
+
 [node name="Stats" type="Panel" parent="."]
 custom_minimum_size = Vector2(212, 36)
+layout_mode = 0
 offset_right = 212.0
 offset_bottom = 36.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cp84r")
@@ -100,17 +135,19 @@ offset_right = 204.0
 offset_bottom = 30.0
 theme_override_styles/background = SubResource("StyleBoxFlat_j4e55")
 theme_override_styles/fill = SubResource("StyleBoxFlat_q2bc2")
-value = 80.0
+value = 100.0
 allow_greater = true
 show_percentage = false
 
 [node name="Cover1" type="Panel" parent="."]
+layout_mode = 0
 offset_top = 2.0
 offset_right = 2.0
 offset_bottom = 36.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_1ln4u")
 
 [node name="Cover2" type="Panel" parent="."]
+layout_mode = 0
 offset_left = 210.0
 offset_top = 2.0
 offset_right = 212.0

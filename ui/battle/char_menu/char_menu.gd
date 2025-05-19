@@ -1,22 +1,59 @@
-extends Node2D
+extends Control
 
 const PURPLE := Color("#332033")
 
-var main_color := Color.WHITE
-var current_hp := 80
-var max_hp := 100
+var main_color := Color.WHITE:
+	set(p_main_color):
+		main_color = p_main_color
+		var style_box: StyleBoxFlat = $Stats/HealthBar.get_theme_stylebox("fill")
+		style_box.bg_color = main_color
+var current_hp := 100:
+	set(p_current_hp):
+		current_hp = p_current_hp
+		$Stats/HealthBar.value = maxi(0, current_hp)
+		$Stats/CurrentHP.text = str(current_hp)
+		update_hp_color()
+var max_hp := 100:
+	set(p_max_hp):
+		max_hp = p_max_hp
+		$Stats/HealthBar.max_value = maxi(1, max_hp)
+		$Stats/MaxHP.text = str(max_hp)
+		update_hp_color()
+var can_spare:
+	set(p_can_spare):
+		can_spare = p_can_spare
+		actions[3].flashing = can_spare
 
-func set_current_hp(p_current_hp: int):
-	current_hp = p_current_hp
-	$Stats/HealthBar.value = maxi(0, current_hp)
-	$Stats/CurrentHP.text = str(current_hp)
-	update_hp_color()
+var actions: Array[CharMenuButton] = []
+var focused := false:
+	set(p_focused):
+		focused = p_focused
+		for action: CharMenuButton in actions:
+			action.focused = focused
+		selected_item = selected_item
+var selected_item := -1:
+	set(p_selected_item):
+		if selected_item != -1:
+			actions[selected_item].selected = false
+		selected_item = p_selected_item
+		if p_selected_item != -1:
+			actions[selected_item].selected = true
 
-func set_max_hp(p_max_hp: int):
-	max_hp = p_max_hp
-	$Stats/HealthBar.max_value = maxi(1, max_hp)
-	$Stats/MaxHP.text = str(max_hp)
-	update_hp_color()
+func _ready() -> void:
+	actions = [
+		$Actions/Attack,
+		$Actions/Act,
+		$Actions/Item,
+		$Actions/Spare,
+		$Actions/Defend
+	]
+
+func _unhandled_key_input(p_event: InputEvent) -> void:
+	if focused and p_event is InputEventKey and p_event.is_pressed():
+		if p_event.is_action("left"):
+			selected_item = wrapi(selected_item - 1, 0, 5)
+		elif p_event.is_action("right"):
+			selected_item =  wrapi(selected_item + 1, 0, 5)
 
 func update_hp_color() -> void:
 	if current_hp < 0.2 * $Stats/HealthBar.max_value:
@@ -26,10 +63,10 @@ func update_hp_color() -> void:
 		($Stats/CurrentHP.label_settings as LabelSettings).font_color = Color.WHITE
 		($Stats/MaxHP.label_settings as LabelSettings).font_color = Color.WHITE
 
-func set_main_color(p_main_color: Color) -> void:
-	main_color = p_main_color
-	var style_box: StyleBoxFlat = $Stats/HealthBar.get_theme_stylebox("fill")
-	style_box.bg_color = main_color
+func set_from_character(character: Character) -> void:
+	$Stats/Name.text = character.title
+	current_hp = character.current_hp
+	main_color = character.main_color
 
 func activate():
 	$Cover1.visible = false
@@ -41,6 +78,8 @@ func activate():
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property($Stats, "position", Vector2($Stats.position.x, -32.0), 1.0 / 6.0)
+	
+	focused = true
 
 func deactivate():
 	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
@@ -51,3 +90,6 @@ func deactivate():
 	tween.tween_property($Stats, "position", Vector2($Stats.position.x, 0.0), 1.0 / 10.0)
 	$Cover1.visible = true
 	$Cover2.visible = true
+	
+	focused = false
+	actions[selected_item].get_child(0).modulate = Color.TRANSPARENT

@@ -17,4 +17,4 @@ script = ExtResource("1_kta3i")
 
 [node name="TypingSound" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_tgo65")
-volume_db = -8.0
+volume_db = -16.0
