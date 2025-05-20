@@ -1,4 +1,5 @@
 extends Control
+class_name CharMenu
 
 const PURPLE := Color("#332033")
 
@@ -22,7 +23,12 @@ var max_hp := 100:
 var can_spare:
 	set(p_can_spare):
 		can_spare = p_can_spare
-		actions[3].flashing = can_spare
+		actions[Global.SPARE].flashing = can_spare
+var uses_magic:
+	set(p_uses_magic):
+		actions[Global.ACT] = $Actions/Magic
+		$Actions/Magic.visible = true
+		$Actions/Act.visible = false
 
 var actions: Array[CharMenuButton] = []
 var focused := false:
@@ -31,13 +37,11 @@ var focused := false:
 		for action: CharMenuButton in actions:
 			action.focused = focused
 		selected_item = selected_item
-var selected_item := -1:
+var selected_item := 0:
 	set(p_selected_item):
-		if selected_item != -1:
-			actions[selected_item].selected = false
+		actions[selected_item].selected = false
 		selected_item = p_selected_item
-		if p_selected_item != -1:
-			actions[selected_item].selected = true
+		actions[selected_item].selected = true
 
 func _ready() -> void:
 	actions = [
@@ -66,20 +70,25 @@ func update_hp_color() -> void:
 func set_from_character(character: Character) -> void:
 	$Stats/Name.text = character.title
 	current_hp = character.current_hp
+	max_hp = character.max_hp
 	main_color = character.main_color
+	$Stats/Icon.texture = character.icon
 
 func activate():
 	$Cover1.visible = false
 	$Cover2.visible = false
 	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
 	upper_box.border_color = main_color
+	focused = true
+	
+	if $Stats.position.y == -32.0:
+		return
+	
 	$Stats.position.y = -16.0
 	var tween := get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property($Stats, "position", Vector2($Stats.position.x, -32.0), 1.0 / 6.0)
-	
-	focused = true
 
 func deactivate():
 	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
@@ -92,4 +101,3 @@ func deactivate():
 	$Cover2.visible = true
 	
 	focused = false
-	actions[selected_item].get_child(0).modulate = Color.TRANSPARENT

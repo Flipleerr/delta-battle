@@ -13,10 +13,11 @@ var tween: Tween
 		sprite = p_sprite
 		region_rect.position.x = 31 * sprite
 		$Title.region_rect.position.x = 31 * sprite
-var selected := false:
+@export var selected := false:
 	set(p_selected):
 		selected = p_selected
-		if selected:
+		
+		if selected and focused:
 			self_modulate = YELLOW
 			$Title.modulate = YELLOW
 		else:

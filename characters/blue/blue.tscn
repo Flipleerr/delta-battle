@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://koaov6uan8c3"]
+[gd_scene load_steps=3 format=3 uid="uid://koaov6uan8c3"]
 
 [ext_resource type="Script" uid="uid://d1ho1nqa4x7fm" path="res://characters/character.gd" id="1_7xeqj"]
+[ext_resource type="Texture2D" uid="uid://jthlsjuluo7b" path="res://characters/blue/res/char_icon.png" id="2_t3yiv"]
 
 [node name="Blue" type="Node2D"]
 script = ExtResource("1_7xeqj")
@@ -8,4 +9,5 @@ title = "Blue"
 current_hp = 110
 max_hp = 110
 main_color = Color(0.118812, 0.590326, 0.738951, 1)
+icon = ExtResource("2_t3yiv")
 metadata/_custom_type_script = "uid://d1ho1nqa4x7fm"

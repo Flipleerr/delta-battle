@@ -46,7 +46,9 @@ offset_bottom = 36.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cp84r")
 
 [node name="Attack" parent="Actions" instance=ExtResource("2_an0ot")]
+self_modulate = Color(1, 1, 0, 1)
 position = Vector2(30, 16)
+selected = true
 
 [node name="Act" parent="Actions" instance=ExtResource("2_an0ot")]
 position = Vector2(65, 16)
@@ -85,7 +87,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cp84r")
 position = Vector2(141, 18)
 texture = ExtResource("1_g0hy4")
 
-[node name="SampleCharIcon" type="Sprite2D" parent="Stats"]
+[node name="Icon" type="Sprite2D" parent="Stats"]
 position = Vector2(27, 19)
 texture = ExtResource("4_lgnlm")
 
