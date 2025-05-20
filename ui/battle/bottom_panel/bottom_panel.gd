@@ -72,11 +72,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			CONTEXT.ITEM_SELECT:
 				return
 			CONTEXT.ACTION:
-				context = CONTEXT.CHAR_MENU
 				current_char = 0
 				for char_menu: CharMenu in char_menus:
 					char_menu.selected_item = 0
-				char_menus[current_char].activate()
+				context = CONTEXT.CHAR_MENU
 				return
 
 func queue_character_action() -> void:
