@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtuxxajnf41ym"]
+[gd_scene load_steps=3 format=3 uid="uid://dtuxxajnf41ym"]
 
 [ext_resource type="Script" uid="uid://c7cl86f4gnd2b" path="res://monsters/monster.gd" id="1_51iiq"]
+[ext_resource type="Texture2D" uid="uid://c78pfs4rteejq" path="res://monsters/slime/res/green_slime.png" id="2_r1nth"]
 
 [node name="Slime" type="Node2D"]
 script = ExtResource("1_51iiq")
@@ -8,3 +9,7 @@ title = "Slime"
 current_hp = 80
 max_hp = 80
 metadata/_custom_type_script = "uid://c7cl86f4gnd2b"
+
+[node name="GreenSlime" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_r1nth")

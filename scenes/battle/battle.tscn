@@ -10,6 +10,8 @@ script = ExtResource("1_0yh6x")
 
 [node name="Characters" type="Node2D" parent="."]
 
+[node name="Monsters" type="Node2D" parent="."]
+
 [node name="BottomPanel" parent="." instance=ExtResource("1_7gynk")]
 position = Vector2(0, 365)
 
@@ -17,4 +19,5 @@ position = Vector2(0, 365)
 position = Vector2(308, 171)
 
 [node name="Soul" parent="." instance=ExtResource("3_0yh6x")]
+visible = false
 position = Vector2(308, 171)

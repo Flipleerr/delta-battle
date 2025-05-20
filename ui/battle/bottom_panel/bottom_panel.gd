@@ -19,6 +19,8 @@ var context := CONTEXT.BATTLE:
 				$MonsterSelect.focused = false
 		context = p_context
 		match context:
+			CONTEXT.BATTLE:
+				get_parent().start_attack()
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].activate()
 			CONTEXT.MONSTER_SELECT:
@@ -26,7 +28,7 @@ var context := CONTEXT.BATTLE:
 				$MonsterSelect.focused = true
 				$MonsterSelect.selected_item = 0
 			CONTEXT.ACT_SELECT:
-				next_char()
+				pass
 
 var char_menus: Array[CharMenu] = []
 var current_char := 0
@@ -72,10 +74,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			CONTEXT.ITEM_SELECT:
 				return
 			CONTEXT.ACTION:
-				current_char = 0
-				for char_menu: CharMenu in char_menus:
-					char_menu.selected_item = 0
-				context = CONTEXT.CHAR_MENU
+				context = CONTEXT.BATTLE
 				return
 
 func queue_character_action() -> void:
@@ -103,6 +102,7 @@ func next_char() -> void:
 		context = CONTEXT.ACTION
 		char_menus[current_char].deactivate()
 	else:
-		char_menus[current_char].deactivate()
+		if current_char != -1:
+			char_menus[current_char].deactivate()
 		current_char += 1
 		context = CONTEXT.CHAR_MENU

@@ -51,27 +51,32 @@ position = Vector2(30, 16)
 selected = true
 
 [node name="Act" parent="Actions" instance=ExtResource("2_an0ot")]
+self_modulate = Color(1, 0.498039, 0.152941, 1)
 position = Vector2(65, 16)
 region_rect = Rect2(31, 0, 31, 26)
 sprite = 1
 
 [node name="Magic" parent="Actions" instance=ExtResource("2_an0ot")]
 visible = false
+self_modulate = Color(1, 0.498039, 0.152941, 1)
 position = Vector2(65, 16)
 region_rect = Rect2(62, 0, 31, 26)
 sprite = 2
 
 [node name="Item" parent="Actions" instance=ExtResource("2_an0ot")]
+self_modulate = Color(1, 0.498039, 0.152941, 1)
 position = Vector2(100, 16)
 region_rect = Rect2(93, 0, 31, 26)
 sprite = 3
 
 [node name="Spare" parent="Actions" instance=ExtResource("2_an0ot")]
+self_modulate = Color(1, 0.498039, 0.152941, 1)
 position = Vector2(135, 16)
 region_rect = Rect2(124, 0, 31, 26)
 sprite = 4
 
 [node name="Defend" parent="Actions" instance=ExtResource("2_an0ot")]
+self_modulate = Color(1, 0.498039, 0.152941, 1)
 position = Vector2(170, 16)
 region_rect = Rect2(155, 0, 31, 26)
 sprite = 5
