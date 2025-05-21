@@ -4,3 +4,7 @@ class_name Monster
 @export var title := ""
 @export var current_hp := 100
 @export var max_hp := 100
+
+## Override per enemy
+func get_opening_line() -> String:
+	return ""

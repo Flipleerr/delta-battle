@@ -7,12 +7,13 @@ static func is_letter_or_number(c: int) -> bool:
 	var is_number := c >= 48 and c <= 57
 	return is_letter or is_number
 
+func hide_text() -> void:
+	showing = false
+	visible_characters = 0
+
 func show_text() -> void:
 	showing = true
 	visible_characters = 0
-
-func _ready() -> void:
-	show_text()
 
 func _physics_process(_delta: float) -> void:
 	if showing and visible_ratio != 1.0:

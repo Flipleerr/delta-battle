@@ -20,6 +20,12 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.ITEM_SELECT:
 				$ItemSelect.visible = false
 				$ItemSelect.focused = false
+			CONTEXT.ACT_SELECT:
+				$ActSelect.visible = false
+				$ActSelect.focused = false
+			CONTEXT.MAGIC_SELECT:
+				$MagicSelect.visible = false
+				$MagicSelect.focused = false
 		context = p_context
 		match context:
 			CONTEXT.BATTLE:
@@ -35,7 +41,19 @@ var context := CONTEXT.BATTLE:
 				$ItemSelect.focused = true
 				$ItemSelect.selected_item = 0
 			CONTEXT.ACT_SELECT:
-				pass
+				$ActSelect.reset_items()
+				for act: Act in Global.characters[current_char].get_acts():
+					$ActSelect.add_item(act.title)
+				$ActSelect.visible = true
+				$ActSelect.focused = true
+				$ActSelect.selected_item = 0
+			CONTEXT.MAGIC_SELECT:
+				$MagicSelect.reset_items()
+				for spell: Spell in Global.characters[current_char].get_spells():
+					$MagicSelect.add_item(spell.title, spell.description, spell.tp_cost)
+				$MagicSelect.visible = true
+				$MagicSelect.focused = true
+				$MagicSelect.selected_item = 0
 
 var char_menus: Array[CharMenu] = []
 var current_char := 0
@@ -82,6 +100,15 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.MONSTER_SELECT
 					return
+				actions[current_char].specific = $ActSelect.selected_item
+				next_char()
+				return
+			CONTEXT.MAGIC_SELECT:
+				if event.is_action("cancel"):
+					context = CONTEXT.CHAR_MENU
+					return
+				actions[current_char].specific = $MagicSelect.selected_item
+				next_char()
 				return
 			CONTEXT.ITEM_SELECT:
 				if event.is_action("cancel"):
@@ -92,6 +119,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				return
 			CONTEXT.ACTION:
 				context = CONTEXT.BATTLE
+				$TextBox.hide_text()
 				return
 
 func queue_character_action() -> void:
@@ -124,3 +152,9 @@ func next_char() -> void:
 			char_menus[current_char].deactivate()
 		current_char += 1
 		context = CONTEXT.CHAR_MENU
+
+func show_text(p_text: String) -> void:
+	$TextBox.hide_text()
+	$TextBox.text = p_text
+	$TextBox.show_text()
+	

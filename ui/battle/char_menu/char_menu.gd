@@ -6,8 +6,8 @@ const PURPLE := Color("#332033")
 var main_color := Color.WHITE:
 	set(p_main_color):
 		main_color = p_main_color
-		var style_box: StyleBoxFlat = $Stats/HealthBar.get_theme_stylebox("fill")
-		style_box.bg_color = main_color
+		var health_box: StyleBoxFlat = $Stats/HealthBar.get_theme_stylebox("fill")
+		health_box.bg_color = main_color
 var current_hp := 100:
 	set(p_current_hp):
 		current_hp = p_current_hp
@@ -46,6 +46,8 @@ var selected_item := 0:
 		selected_item = p_selected_item
 		actions[selected_item].selected = true
 
+var style_box: StyleBoxFlat
+
 func _ready() -> void:
 	actions = [
 		$Actions/Attack,
@@ -54,6 +56,10 @@ func _ready() -> void:
 		$Actions/Spare,
 		$Actions/Defend
 	]
+	style_box = $Stats.get_theme_stylebox("panel")
+	style_box = style_box.duplicate()
+	$Stats.add_theme_stylebox_override("panel", style_box)
+	$Actions.add_theme_stylebox_override("panel", style_box)
 
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():
@@ -80,8 +86,7 @@ func set_from_character(character: Character) -> void:
 func activate():
 	$Cover1.visible = false
 	$Cover2.visible = false
-	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
-	upper_box.border_color = main_color
+	style_box.border_color = main_color
 	activated = true
 	focused = true
 	
@@ -95,8 +100,7 @@ func activate():
 	tween.tween_property($Stats, "position", Vector2($Stats.position.x, -32.0), 1.0 / 6.0)
 
 func deactivate():
-	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
-	upper_box.border_color = PURPLE
+	style_box.border_color = PURPLE
 	var tween := get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)

@@ -5,6 +5,7 @@ const CENTER := Vector2(308.0, 171.0)
 func _ready() -> void:
 	set_positions($Characters, Global.characters, Vector2(108.0, 0.0))
 	set_positions($Monsters, Global.monsters, Vector2(640.0 - 108.0, 0.0))
+	$BottomPanel.show_text(Global.get_opening_line())
 
 func set_positions(parent: Node, nodes: Array, offset := Vector2.ZERO):
 	var size := nodes.size()

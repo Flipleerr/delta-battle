@@ -3,12 +3,15 @@ extends Node2D
 const MOVE_DIST := 6.0
 
 @export var show_description := true
+@export var show_tp := false
 
 var focused := false:
 	set(p_focused):
 		focused = p_focused
 		for item: TwoColItem in items:
 			item.set_select(false)
+			if show_tp:
+				item.update_modulation()
 		selected_item = selected_item
 var selected_item := 0:
 	set(p_selected_item):
@@ -16,6 +19,7 @@ var selected_item := 0:
 		selected_item = p_selected_item
 		items[selected_item].set_select(true)
 		$Description.text = items[selected_item].description
+		$TP.text = str(roundi(items[selected_item].tp)) + "%"
 		$Clip/Items.position.y = 3.0
 		if items.size() > 6:
 			if selected_item < 6:
@@ -41,6 +45,7 @@ var selected_coords := Vector2i.ZERO:
 
 func _ready() -> void:
 	$Description.visible = show_description
+	$TP.visible = show_tp
 	initial_up_arrow_position = $UpArrow.position.y
 	initial_down_arrow_position = $DownArrow.position.y
 
@@ -66,12 +71,9 @@ func reset_items() -> void:
 	for item: TwoColItem in $Clip/Items.get_children():
 		item.queue_free()
 
-func add_item(p_name: String, p_description: String) -> void:
+func add_item(p_name: String, p_description := "", p_tp := 0.0) -> void:
 	var new_item: TwoColItem = two_col_item_scene.instantiate()
-	if p_description != "":
-		new_item.initialize(p_name, p_description)
-	else:
-		new_item.initialize(p_name, "")
+	new_item.initialize(p_name, p_description, p_tp)
 	$Clip/Items.add_child(new_item)
 	items.append(new_item)
 
