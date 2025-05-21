@@ -16,16 +16,15 @@ var tween: Tween
 @export var selected := false:
 	set(p_selected):
 		selected = p_selected
-		
-		if selected and focused:
+		if selected and activated:
 			self_modulate = YELLOW
 			$Title.modulate = YELLOW
 		else:
 			self_modulate = ORANGE
 			$Title.modulate = Color.TRANSPARENT
-var focused := false:
-	set(p_focused):
-		focused = p_focused
+var activated := false:
+	set(p_activated):
+		activated = p_activated
 
 @export var flashing := false:
 	set(p_flashing):
@@ -41,7 +40,7 @@ var focused := false:
 		if selected:
 			self_modulate = YELLOW.lerp(FLASH, flash_amount)
 			$Title.modulate = YELLOW.lerp(FLASH, flash_amount)
-		elif focused:
+		elif activated:
 			self_modulate = ORANGE.lerp(FLASH, flash_amount)
 			$Title.modulate = Color.TRANSPARENT.lerp(FLASH, flash_amount)
 		else:

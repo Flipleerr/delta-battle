@@ -1,10 +1,15 @@
 extends CharacterBody2D
+class_name Soul
 
 const SPEED := 4.0 * 30.0 # 4 pixels per frame
 const SLOW_MULTIPLIER := 0.5
+const TP_INDICATOR_DISSIPATE := 30.0 / 9.0 # Fully disappears in 9 frames
 var active := false
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if $TPIndicator.modulate.a != 0.0:
+		$TPIndicator.modulate.a -= TP_INDICATOR_DISSIPATE * delta
+		$TPIndicator.modulate.a = maxf(0.0, $TPIndicator.modulate.a) 
 	if !active:
 		return
 	
@@ -19,3 +24,10 @@ func _physics_process(_delta: float) -> void:
 		if Input.is_action_pressed("cancel"):
 			velocity *= 0.5
 	move_and_slide()
+
+func hurt() -> void:
+	get_parent().hurt()
+
+func _on_tp_range_area_entered(_area: Area2D) -> void:
+	get_parent().increase_tp()
+	$TPIndicator.modulate.a = 1.0

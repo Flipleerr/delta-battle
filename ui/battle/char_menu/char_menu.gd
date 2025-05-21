@@ -31,11 +31,14 @@ var uses_magic:
 		$Actions/Act.visible = false
 
 var actions: Array[CharMenuButton] = []
+var activated := false:
+	set(p_activated):
+		activated = p_activated
+		for action: CharMenuButton in actions:
+			action.activated = activated
 var focused := false:
 	set(p_focused):
 		focused = p_focused
-		for action: CharMenuButton in actions:
-			action.focused = focused
 		selected_item = selected_item
 var selected_item := 0:
 	set(p_selected_item):
@@ -79,6 +82,7 @@ func activate():
 	$Cover2.visible = false
 	var upper_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
 	upper_box.border_color = main_color
+	activated = true
 	focused = true
 	
 	if $Stats.position.y == -32.0:
@@ -100,4 +104,5 @@ func deactivate():
 	$Cover1.visible = true
 	$Cover2.visible = true
 	
+	activated = false
 	focused = false
