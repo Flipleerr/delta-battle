@@ -17,6 +17,9 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.MONSTER_SELECT:
 				$MonsterSelect.visible = false
 				$MonsterSelect.focused = false
+			CONTEXT.ITEM_SELECT:
+				$ItemSelect.visible = false
+				$ItemSelect.focused = false
 		context = p_context
 		match context:
 			CONTEXT.BATTLE:
@@ -27,6 +30,10 @@ var context := CONTEXT.BATTLE:
 				$MonsterSelect.visible = true
 				$MonsterSelect.focused = true
 				$MonsterSelect.selected_item = 0
+			CONTEXT.ITEM_SELECT:
+				$ItemSelect.visible = true
+				$ItemSelect.focused = true
+				$ItemSelect.selected_item = 0
 			CONTEXT.ACT_SELECT:
 				pass
 
@@ -42,6 +49,8 @@ func _ready() -> void:
 		$Characters.add_child(char_menu)
 		char_menus.append(char_menu)
 		actions.append(Action.new())
+	for item: Item in Global.items:
+		$ItemSelect.add_item(item.name, item.short_description)
 	context = CONTEXT.CHAR_MENU
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -70,8 +79,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				next_char()
 				return
 			CONTEXT.ACT_SELECT:
+				if event.is_action("cancel"):
+					context = CONTEXT.MONSTER_SELECT
+					return
 				return
 			CONTEXT.ITEM_SELECT:
+				if event.is_action("cancel"):
+					context = CONTEXT.CHAR_MENU
+					return
+				actions[current_char].specific = $ItemSelect.selected_item
+				next_char()
 				return
 			CONTEXT.ACTION:
 				context = CONTEXT.BATTLE
@@ -90,6 +107,7 @@ func queue_character_action() -> void:
 				context = CONTEXT.MAGIC_SELECT
 		Global.ITEM:
 			actions[current_char].what = Global.ITEM
+			context = CONTEXT.ITEM_SELECT
 		Global.SPARE:
 			actions[current_char].what = Global.SPARE
 			context = CONTEXT.MONSTER_SELECT

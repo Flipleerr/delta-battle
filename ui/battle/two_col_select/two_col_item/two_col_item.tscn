@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg6dv22mpqmch"]
+
+[ext_resource type="Script" uid="uid://beyomtofx8ctf" path="res://ui/battle/two_col_select/two_col_item/two_col_item.gd" id="1_yr8f7"]
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/res/heart.png" id="2_t0k4i"]
+
+[node name="TwoColItem" type="Control"]
+custom_minimum_size = Vector2(237, 30)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_yr8f7")
+
+[node name="Heart" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(21, 16)
+texture = ExtResource("2_t0k4i")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(150, 32)
+layout_mode = 0
+offset_left = 33.0
+offset_top = -2.0
+offset_right = 237.0
+offset_bottom = 30.0
+text = "Glowshard"
+clip_text = true
