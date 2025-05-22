@@ -5,7 +5,12 @@ enum {
 }
 
 const YELLOW := Color("#ffff00")
-var tp := 0.0
+var tp := 0.0:
+	set(p_tp):
+		tp = p_tp
+		tp_changed.emit()
+
+signal tp_changed
 
 var characters: Array[Character] = [
 	preload("res://characters/blue/blue.tscn").instantiate(),

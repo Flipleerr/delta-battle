@@ -65,6 +65,3 @@ func play_heart_animation() -> void:
 
 func hurt() -> void:
 	print("heart hit")
-
-func increase_tp() -> void:
-	print("tp gotten")

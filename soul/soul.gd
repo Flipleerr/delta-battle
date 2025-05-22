@@ -29,5 +29,5 @@ func hurt() -> void:
 	get_parent().hurt()
 
 func _on_tp_range_area_entered(_area: Area2D) -> void:
-	get_parent().increase_tp()
+	Global.tp += 1
 	$TPIndicator.modulate.a = 1.0

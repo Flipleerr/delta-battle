@@ -157,4 +157,3 @@ func show_text(p_text: String) -> void:
 	$TextBox.hide_text()
 	$TextBox.text = p_text
 	$TextBox.show_text()
-	
