@@ -7,7 +7,7 @@ enum {
 const YELLOW := Color("#ffff00")
 var tp := 0.0:
 	set(p_tp):
-		tp = p_tp
+		tp = minf(p_tp, 100.0)
 		tp_changed.emit()
 
 signal tp_changed

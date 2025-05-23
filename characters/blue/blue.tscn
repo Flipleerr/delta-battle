@@ -10,6 +10,7 @@ title = "Blue"
 current_hp = 110
 max_hp = 110
 main_color = Color(0.118812, 0.590326, 0.738951, 1)
+icon_color = Color(0.247059, 0.247059, 0.454902, 1)
 icon = ExtResource("2_t3yiv")
 metadata/_custom_type_script = "uid://d1ho1nqa4x7fm"
 

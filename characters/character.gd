@@ -6,6 +6,7 @@ class_name Character
 @export var max_hp := 100
 @export var uses_magic := false
 @export_color_no_alpha var main_color := Color.WHITE
+@export_color_no_alpha var icon_color := Color.GRAY
 @export var icon: Texture2D = preload("res://ui/battle/char_menu/res/sample_char_icon.png")
 
 ## Override function

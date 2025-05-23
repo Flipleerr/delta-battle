@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://blakyaaofibec"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f7j4o"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="AttackTiming" type="Node2D"]
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(640, 115)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_f7j4o")

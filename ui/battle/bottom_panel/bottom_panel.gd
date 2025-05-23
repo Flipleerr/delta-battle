@@ -60,6 +60,9 @@ var current_char := 0
 
 var actions: Array[Action] = []
 
+var waiting_for_text := false
+signal text_finished
+
 func _ready() -> void:
 	for character: Character in Global.characters:
 		var char_menu := preload("res://ui/battle/char_menu/char_menu.tscn").instantiate()
@@ -70,8 +73,11 @@ func _ready() -> void:
 	for item: Item in Global.items:
 		$ItemSelect.add_item(item.name, item.short_description)
 	context = CONTEXT.CHAR_MENU
+	$TextBox.text_finished.connect(text_is_finished)
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if waiting_for_text:
+		return
 	if (event.is_action("confirm") or event.is_action("cancel")) and event.is_pressed():
 		match context:
 			CONTEXT.BATTLE:
@@ -83,6 +89,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					char_menus[current_char].deactivate()
 					current_char -= 1
 					char_menus[current_char].activate()
+					char_menus[current_char].deconfirm_action()
 					return
 				queue_character_action()
 				return
@@ -120,6 +127,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			CONTEXT.ACTION:
 				context = CONTEXT.BATTLE
 				$TextBox.hide_text()
+				for char_menu: CharMenu in char_menus:
+					char_menu.deconfirm_action()
 				return
 
 func queue_character_action() -> void:
@@ -147,9 +156,11 @@ func next_char() -> void:
 	if current_char == char_menus.size() - 1:
 		context = CONTEXT.ACTION
 		char_menus[current_char].deactivate()
+		char_menus[current_char].confirm_action(actions[current_char].what)
 	else:
 		if current_char != -1:
 			char_menus[current_char].deactivate()
+			char_menus[current_char].confirm_action(actions[current_char].what)
 		current_char += 1
 		context = CONTEXT.CHAR_MENU
 
@@ -157,3 +168,8 @@ func show_text(p_text: String) -> void:
 	$TextBox.hide_text()
 	$TextBox.text = p_text
 	$TextBox.show_text()
+	waiting_for_text = true
+
+func text_is_finished() -> void:
+	text_finished.emit()
+	waiting_for_text = false

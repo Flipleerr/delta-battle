@@ -20,11 +20,11 @@ var max_hp := 100:
 		$Stats/HealthBar.max_value = maxi(1, max_hp)
 		$Stats/MaxHP.text = str(max_hp)
 		update_hp_color()
-var can_spare:
+var can_spare := false:
 	set(p_can_spare):
 		can_spare = p_can_spare
 		actions[Global.SPARE].flashing = can_spare
-var uses_magic:
+var uses_magic := false:
 	set(p_uses_magic):
 		actions[Global.ACT] = $Actions/Magic
 		$Actions/Magic.visible = true
@@ -34,6 +34,7 @@ var actions: Array[CharMenuButton] = []
 var activated := false:
 	set(p_activated):
 		activated = p_activated
+		$Actions/BGLineAnimation.visible = activated
 		for action: CharMenuButton in actions:
 			action.activated = activated
 var focused := false:
@@ -82,6 +83,8 @@ func set_from_character(character: Character) -> void:
 	max_hp = character.max_hp
 	main_color = character.main_color
 	$Stats/Icon.texture = character.icon
+	$Stats/ActionIcon.modulate = character.icon_color
+	$Actions/BGLineAnimation.modulate = character.main_color
 
 func activate():
 	$Cover1.visible = false
@@ -110,3 +113,15 @@ func deactivate():
 	
 	activated = false
 	focused = false
+
+func confirm_action(action: int) -> void:
+	$Stats/Icon.visible = false
+	$Stats/ActionIcon.visible = true
+	if action == 1:
+		$Stats/ActionIcon.frame = action + int(uses_magic)
+	else:
+		$Stats/ActionIcon.frame = action + int(action > 1)
+
+func deconfirm_action() -> void:
+	$Stats/Icon.visible = true
+	$Stats/ActionIcon.visible = false

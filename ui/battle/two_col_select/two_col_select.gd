@@ -27,7 +27,7 @@ var selected_item := 0:
 				$DownArrow.visible = true
 			else:
 				$UpArrow.visible = true
-				$UpArrow.visible = false
+				$DownArrow.visible = false
 				$Clip/Items.position.y -= 102.0
 
 var initial_up_arrow_position := 0.0

@@ -1,5 +1,6 @@
 extends RichTextLabel
 
+signal text_finished
 var showing := false
 
 static func is_letter_or_number(c: int) -> bool:
@@ -21,3 +22,5 @@ func _physics_process(_delta: float) -> void:
 		var c := text[visible_characters - 1].to_ascii_buffer()[0]
 		if is_letter_or_number(c):
 			$TypingSound.play()
+		if visible_ratio >= 1.0:
+			text_finished.emit()
