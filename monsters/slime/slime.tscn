@@ -8,8 +8,9 @@ script = ExtResource("1_r1nth")
 title = "Slime"
 current_hp = 80
 max_hp = 80
+main_sprite = NodePath("Sprite")
 metadata/_custom_type_script = "uid://c7cl86f4gnd2b"
 
-[node name="GreenSlime" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("2_r1nth")

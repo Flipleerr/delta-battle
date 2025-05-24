@@ -15,16 +15,12 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].focused = false
 			CONTEXT.MONSTER_SELECT:
-				$MonsterSelect.visible = false
 				$MonsterSelect.focused = false
 			CONTEXT.ITEM_SELECT:
-				$ItemSelect.visible = false
 				$ItemSelect.focused = false
 			CONTEXT.ACT_SELECT:
-				$ActSelect.visible = false
 				$ActSelect.focused = false
 			CONTEXT.MAGIC_SELECT:
-				$MagicSelect.visible = false
 				$MagicSelect.focused = false
 		context = p_context
 		match context:
@@ -54,6 +50,12 @@ var context := CONTEXT.BATTLE:
 				$MagicSelect.visible = true
 				$MagicSelect.focused = true
 				$MagicSelect.selected_item = 0
+			CONTEXT.ACTION:
+				$TextBox.hide_text()
+				for char_menu: CharMenu in char_menus:
+					char_menu.deconfirm_action()
+				current_char = -1
+				do_next_action()
 
 var char_menus: Array[CharMenu] = []
 var current_char := 0
@@ -125,10 +127,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				next_char()
 				return
 			CONTEXT.ACTION:
+				current_char = 0
 				context = CONTEXT.BATTLE
-				$TextBox.hide_text()
-				for char_menu: CharMenu in char_menus:
-					char_menu.deconfirm_action()
 				return
 
 func queue_character_action() -> void:
@@ -154,15 +154,30 @@ func queue_character_action() -> void:
 
 func next_char() -> void:
 	if current_char == char_menus.size() - 1:
-		context = CONTEXT.ACTION
-		char_menus[current_char].deactivate()
 		char_menus[current_char].confirm_action(actions[current_char].what)
+		char_menus[current_char].deactivate()
+		context = CONTEXT.ACTION
 	else:
 		if current_char != -1:
 			char_menus[current_char].deactivate()
 			char_menus[current_char].confirm_action(actions[current_char].what)
 		current_char += 1
 		context = CONTEXT.CHAR_MENU
+
+func do_next_action() -> void:
+	if current_char == -1:
+		var fighting_characters := PackedInt32Array()
+		for i: int in actions.size():
+			var action := actions[i]
+			if action.what == Global.FIGHT:
+				fighting_characters.append(i)
+				$AttackTiming.set_as_attacking(i, true)
+			else:
+				$AttackTiming.set_as_attacking(i, false)
+		if !fighting_characters.is_empty():
+			$AttackTiming.focused = true
+		current_char = 0
+		return
 
 func show_text(p_text: String) -> void:
 	$TextBox.hide_text()
@@ -173,3 +188,5 @@ func show_text(p_text: String) -> void:
 func text_is_finished() -> void:
 	text_finished.emit()
 	waiting_for_text = false
+	if context == CONTEXT.ACTION:
+		do_next_action()

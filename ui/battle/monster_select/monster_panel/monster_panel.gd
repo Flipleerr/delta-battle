@@ -18,6 +18,7 @@ func set_max_hp(p_max_hp: int) -> void:
 func set_mercy_percent(p_mercy_percent: float) -> void:
 	$MercyBar.value = p_mercy_percent
 	$MercyText.text = str(roundi(p_mercy_percent * 100.0)) + "%"
+	$MercyText.modulate = Color.WHITE if p_mercy_percent < 1.0 else Global.YELLOW
 
 func set_from_monster(p_monster: Monster) -> void:
 	set_title(p_monster.title)

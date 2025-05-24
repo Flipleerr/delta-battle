@@ -8,6 +8,7 @@ const MOVE_DIST := 6.0
 var focused := false:
 	set(p_focused):
 		focused = p_focused
+		visible = focused
 		for item: TwoColItem in items:
 			item.set_select(false)
 			if show_tp:

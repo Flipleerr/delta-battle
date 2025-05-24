@@ -3,14 +3,17 @@ extends Node2D
 var focused := false:
 	set(p_focused):
 		focused = p_focused
+		visible = focused
 		for monster_panel: MonsterPanel in monster_panels:
 			monster_panel.set_select(false)
 		selected_item = selected_item
 var selected_item := 0:
 	set(p_selected_item):
 		monster_panels[selected_item].set_select(false)
+		Global.monsters[selected_item].set_selected(false)
 		selected_item = p_selected_item
 		monster_panels[selected_item].set_select(true)
+		Global.monsters[selected_item].set_selected(true and focused)
 var monster_panels: Array[MonsterPanel] = []
 
 func _ready() -> void:

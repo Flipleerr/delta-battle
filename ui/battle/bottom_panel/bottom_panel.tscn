@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dh7u53yj0xavd"]
+[gd_scene load_steps=8 format=3 uid="uid://dh7u53yj0xavd"]
 
 [ext_resource type="Script" uid="uid://dexbpui8jgwli" path="res://ui/battle/bottom_panel/bottom_panel.gd" id="1_11je6"]
 [ext_resource type="PackedScene" uid="uid://c5cnxltgwop68" path="res://ui/text_box/text_box.tscn" id="1_sd2ip"]
 [ext_resource type="PackedScene" uid="uid://bn7o6vx5tirfh" path="res://ui/battle/monster_select/monster_select.tscn" id="3_rmodj"]
 [ext_resource type="PackedScene" uid="uid://cw777caepj6ix" path="res://ui/battle/two_col_select/two_col_select.tscn" id="4_11je6"]
+[ext_resource type="PackedScene" uid="uid://blakyaaofibec" path="res://ui/battle/attack_timing/attack_timing.tscn" id="5_y2sg7"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7giy0"]
 content_margin_top = 9.0
@@ -34,6 +35,9 @@ show_description = false
 [node name="MagicSelect" parent="." instance=ExtResource("4_11je6")]
 visible = false
 show_description = false
+
+[node name="AttackTiming" parent="." instance=ExtResource("5_y2sg7")]
+visible = false
 
 [node name="BottomDivider" type="Panel" parent="."]
 offset_top = -3.0
