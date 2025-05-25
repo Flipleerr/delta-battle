@@ -1,6 +1,8 @@
 extends Control
 class_name MonsterPanel
 
+var monster_id := 0
+
 func set_select(p_selected: bool) -> void:
 	$Heart.visible = p_selected
 
@@ -24,3 +26,4 @@ func set_from_monster(p_monster: Monster) -> void:
 	set_title(p_monster.title)
 	set_current_hp(p_monster.current_hp)
 	set_max_hp(p_monster.max_hp)
+	monster_id = Global.monsters.find(p_monster)

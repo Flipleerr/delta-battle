@@ -1,7 +1,7 @@
 extends Node2D
 
 enum CONTEXT {
-	BATTLE, CHAR_MENU, MONSTER_SELECT, ITEM_SELECT, ACT_SELECT, MAGIC_SELECT, CHAR_SELECT, ACTION
+	BATTLE, CHAR_MENU, MONSTER_SELECT, ITEM_SELECT, ACT_SELECT, MAGIC_SELECT, CHAR_SELECT, ACTION, WON
 }
 
 class Action:
@@ -126,10 +126,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				actions[current_char].specific = $ItemSelect.selected_item
 				next_char()
 				return
-			CONTEXT.ACTION:
-				current_char = 0
-				context = CONTEXT.BATTLE
-				return
 
 func queue_character_action() -> void:
 	match char_menus[current_char].selected_item:
@@ -178,6 +174,21 @@ func do_next_action() -> void:
 			$AttackTiming.focused = true
 		current_char = 0
 		return
+	current_char = 0
+	context = CONTEXT.BATTLE
+
+func do_attack(p_char_id: int, p_damage: int) -> void:
+	var monster := Global.monsters[actions[p_char_id].to]
+	if monster == null:
+		for i: int in Global.monsters.size():
+			if Global.monsters[i] != null:
+				monster = Global.monsters[i]
+				break
+		if monster == null:
+			do_next_action()
+			return
+	var character := Global.characters[p_char_id]
+	character.do_attack(monster, p_damage)
 
 func show_text(p_text: String) -> void:
 	$TextBox.hide_text()

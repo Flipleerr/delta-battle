@@ -10,19 +10,29 @@ var focused := false:
 var selected_item := 0:
 	set(p_selected_item):
 		monster_panels[selected_item].set_select(false)
-		Global.monsters[selected_item].set_selected(false)
+		Global.monsters[monster_panels[selected_item].monster_id].set_selected(false)
 		selected_item = p_selected_item
 		monster_panels[selected_item].set_select(true)
-		Global.monsters[selected_item].set_selected(true and focused)
+		Global.monsters[monster_panels[selected_item].monster_id].set_selected(true and focused)
 var monster_panels: Array[MonsterPanel] = []
 
 func _ready() -> void:
+	initialize_panels()
+	Global.monster_killed.connect(initialize_panels)
+
+func initialize_panels() -> void:
+	for panel: MonsterPanel in monster_panels:
+		panel.queue_free()
+	monster_panels.clear()
 	for monster: Monster in Global.monsters:
+		if monster == null:
+			continue
 		var monster_panel := preload("res://ui/battle/monster_select/monster_panel/monster_panel.tscn").instantiate()
 		monster_panel.set_from_monster(monster)
 		$Monsters.add_child(monster_panel)
 		monster_panels.append(monster_panel)
-	monster_panels[0].set_select(true)
+	if !monster_panels.is_empty():
+		monster_panels[0].set_select(true)
 
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():

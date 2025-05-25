@@ -64,3 +64,13 @@ offset_left = 410.0
 offset_right = 416.0
 offset_bottom = 38.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cnqbx")
+
+[node name="Flash" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
+top_level = true
+custom_minimum_size = Vector2(6, 38)
+layout_mode = 0
+offset_right = 6.0
+offset_bottom = 38.0
+pivot_offset = Vector2(3, 19)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cnqbx")

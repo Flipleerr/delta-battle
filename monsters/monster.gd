@@ -7,12 +7,13 @@ class_name Monster
 
 @export_node_path("Sprite2D") var main_sprite
 var sprite: Sprite2D
+var mat: ShaderMaterial
 
 func _ready() -> void:
 	if !main_sprite:
 		return
 	sprite = get_node(main_sprite)
-	var mat := ShaderMaterial.new()
+	mat = ShaderMaterial.new()
 	mat.shader = preload("res://monsters/generic_monster.gdshader")
 	sprite.material = mat
 
@@ -20,6 +21,15 @@ func get_opening_line() -> String:
 	return ""
 
 func set_selected(p_selected: bool) -> void:
-	if !sprite:
+	if !mat:
 		return
-	sprite.material.set_shader_parameter("flash", float(p_selected))
+	mat.set_shader_parameter("flash", float(p_selected))
+
+func take_damage(p_damage: int) -> void:
+	current_hp -= p_damage
+	if current_hp < 0:
+		die()
+
+func die() -> void:
+	Global.kill_monster(self)
+	queue_free()

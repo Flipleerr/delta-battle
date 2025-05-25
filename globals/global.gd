@@ -11,6 +11,7 @@ var tp := 0.0:
 		tp_changed.emit()
 
 signal tp_changed
+signal monster_killed
 
 var characters: Array[Character] = [
 	preload("res://characters/blue/blue.tscn").instantiate(),
@@ -49,3 +50,7 @@ func get_opening_line() -> String:
 			return "  * You encountered a monster!"
 		return "  * You encountered some monsters!"
 	return lines[randi_range(0, lines.size() - 1)]
+
+func kill_monster(p_monster: Monster) -> void:
+	monsters[monsters.find(p_monster)] = null
+	monster_killed.emit()
