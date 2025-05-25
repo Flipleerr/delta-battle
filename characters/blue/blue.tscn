@@ -160,7 +160,7 @@ metadata/_custom_type_script = "uid://d1ho1nqa4x7fm"
 [node name="BlueRobot" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("3_hgvxa")
-hframes = 11
+hframes = 12
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

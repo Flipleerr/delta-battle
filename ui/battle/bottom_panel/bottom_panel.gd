@@ -28,6 +28,7 @@ var context := CONTEXT.BATTLE:
 				get_parent().start_attack()
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].activate()
+				Global.characters[current_char].idle()
 			CONTEXT.MONSTER_SELECT:
 				$MonsterSelect.visible = true
 				$MonsterSelect.focused = true
@@ -103,6 +104,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
 					context = CONTEXT.ACT_SELECT
 					return
+				Global.characters[current_char].prep_attack()
 				next_char()
 				return
 			CONTEXT.ACT_SELECT:
@@ -110,6 +112,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.MONSTER_SELECT
 					return
 				actions[current_char].specific = $ActSelect.selected_item
+				Global.characters[current_char].prep_act()
 				next_char()
 				return
 			CONTEXT.MAGIC_SELECT:
@@ -117,6 +120,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.CHAR_MENU
 					return
 				actions[current_char].specific = $MagicSelect.selected_item
+				Global.characters[current_char].prep_act()
 				next_char()
 				return
 			CONTEXT.ITEM_SELECT:
@@ -146,6 +150,7 @@ func queue_character_action() -> void:
 			context = CONTEXT.MONSTER_SELECT
 		Global.DEFEND:
 			actions[current_char].what = Global.DEFEND
+			Global.characters[current_char].defend()
 			next_char()
 
 func next_char() -> void:

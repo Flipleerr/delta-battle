@@ -17,7 +17,8 @@ func _ready() -> void:
 
 func set_as_attacking(p_char: int, p_is_attacking: bool) -> void:
 	char_timings[p_char].set_active(p_is_attacking)
-	active_timings.append(char_timings[p_char])
+	if p_is_attacking:
+		active_timings.append(char_timings[p_char])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("confirm") and event.is_pressed() and focused and handle_input:
