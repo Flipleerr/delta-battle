@@ -6,8 +6,7 @@ func shake_sprite(amount: float) -> void:
 	shake = amount
 
 func _ready() -> void:
-	await get_tree().create_timer(1.0).timeout
-	$AnimationPlayer.play("attack")
+	$AnimationPlayer.play("idle")
 
 func _process(delta: float) -> void:
 	if shake > 0.0:
