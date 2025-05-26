@@ -96,6 +96,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					current_char -= 1
 					char_menus[current_char].activate()
 					char_menus[current_char].deconfirm_action()
+					Global.characters[current_char].idle()
 					return
 				queue_character_action()
 				return
@@ -178,12 +179,37 @@ func do_next_action() -> void:
 				$AttackTiming.set_as_attacking(i, true)
 			else:
 				$AttackTiming.set_as_attacking(i, false)
+		current_char = 0
 		if !fighting_characters.is_empty():
 			$AttackTiming.focused = true
-		current_char = 0
+		else:
+			do_next_action()
 		return
-	current_char = 0
-	context = CONTEXT.BATTLE
+	if current_char == char_menus.size():
+		current_char = 0
+		context = CONTEXT.BATTLE
+		return
+	match actions[current_char].what:
+		Global.FIGHT:
+			current_char += 1
+			do_next_action()
+			return
+		Global.ACT:
+			current_char += 1
+			do_next_action()
+			return
+		Global.ITEM:
+			current_char += 1
+			do_next_action()
+			return
+		Global.SPARE:
+			current_char += 1
+			do_next_action()
+			return
+		Global.DEFEND:
+			current_char += 1
+			do_next_action()
+			return
 
 func do_attack(p_char_id: int, p_damage: int) -> void:
 	var monster := Global.monsters[actions[p_char_id].to]

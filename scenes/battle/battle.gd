@@ -63,5 +63,10 @@ func end_attack() -> void:
 func play_heart_animation() -> void:
 	$Soul.visible = false
 
-func hurt() -> void:
-	print("heart hit")
+func hurt(p_damage: int) -> void:
+	var alive_characters: Array[Character] = []
+	for character: Character in Global.characters:
+		if character.alive:
+			alive_characters.append(character)
+	var character: Character = alive_characters.pick_random()
+	character.hurt(p_damage)

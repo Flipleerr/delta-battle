@@ -11,8 +11,10 @@ shader_parameter/flash = 0.0
 [node name="Slime" type="Node2D"]
 script = ExtResource("1_r1nth")
 title = "Slime"
-current_hp = 80
-max_hp = 80
+current_hp = 130
+max_hp = 130
+strength = 9
+defense = 2
 main_sprite = NodePath("Sprite")
 metadata/_custom_type_script = "uid://c7cl86f4gnd2b"
 

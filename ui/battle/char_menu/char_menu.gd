@@ -77,6 +77,9 @@ func update_hp_color() -> void:
 		($Stats/CurrentHP.label_settings as LabelSettings).font_color = Color.WHITE
 		($Stats/MaxHP.label_settings as LabelSettings).font_color = Color.WHITE
 
+func set_current_health(p_current_health: int) -> void:
+	current_hp = p_current_health
+
 func set_from_character(character: Character) -> void:
 	$Stats/Name.text = character.title
 	current_hp = character.current_hp
@@ -85,6 +88,7 @@ func set_from_character(character: Character) -> void:
 	$Stats/Icon.texture = character.icon
 	$Stats/ActionIcon.modulate = character.icon_color
 	$Actions/BGLineAnimation.modulate = character.main_color
+	character.health_changed.connect(set_current_health)
 
 func activate():
 	$Cover1.visible = false

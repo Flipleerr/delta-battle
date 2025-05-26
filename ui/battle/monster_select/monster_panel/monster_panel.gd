@@ -27,3 +27,4 @@ func set_from_monster(p_monster: Monster) -> void:
 	set_current_hp(p_monster.current_hp)
 	set_max_hp(p_monster.max_hp)
 	monster_id = Global.monsters.find(p_monster)
+	p_monster.health_changed.connect(set_current_hp)

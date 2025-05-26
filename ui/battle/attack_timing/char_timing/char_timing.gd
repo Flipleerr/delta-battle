@@ -34,6 +34,7 @@ func _process(delta: float) -> void:
 		if indicator.position.x < 64.0:
 			create_shadow()
 			indicator.visible = false
+			Input.action_press("confirm")
 
 func create_shadow() -> void:
 	var new_shadow: Panel = indicator.duplicate()
@@ -49,11 +50,11 @@ func hit() -> int:
 	var tween := get_tree().create_tween().set_parallel(true)
 	tween.tween_property($Flash, "modulate", Color.TRANSPARENT, 0.5)
 	tween.tween_property($Flash, "scale", Vector2(2.0, 2.0), 0.5)
-	var max_damage := Global.characters[char_id].strength
+	var max_damage := Global.characters[char_id].strength * 5
 	var damage := max_damage
 	if !perfect_hit:
 		if indicator.position.x > 82.0:
 			damage = int(damage * remap(indicator.position.x, 202.0, 94.0, 0.0, 0.8))
 		else:
-			damage = int(remap(indicator.position.x, 64.0, 82.0, 0.5, 0.8))
+			damage = int(damage * remap(indicator.position.x, 64.0, 82.0, 0.0, 0.8))
 	return damage

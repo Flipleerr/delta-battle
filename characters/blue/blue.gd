@@ -20,10 +20,11 @@ func prep_attack() -> void:
 	$AnimationPlayer.play("prep_attack")
 
 func do_attack(p_monster: Monster, p_damage: int) -> void:
-	p_monster.take_damage(p_damage)
+	p_monster.take_damage(self, p_damage)
 	$AnimationPlayer.play("attack")
 	await $AnimationPlayer.animation_finished
-	p_monster.damage_or_die_animation()
+	if p_monster:
+		p_monster.damage_or_die_animation()
 	await get_tree().create_timer(0.2).timeout
 	idle()
 
@@ -35,3 +36,12 @@ func do_act(_p_monster: Monster, _p_act: int) -> void:
 
 func defend() -> void:
 	$AnimationPlayer.play("defend")
+
+func faint() -> void:
+	alive = false
+	$AnimationPlayer.play("faint")
+
+func revive() -> void:
+	alive = true
+	$AnimationPlayer.play("RESET")
+	$AnimationPlayer.play("idle")

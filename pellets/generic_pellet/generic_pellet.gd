@@ -35,7 +35,3 @@ func _physics_process(delta: float) -> void:
 	if rotate_sprite:
 		$Sprite.rotation = velocity.angle()
 	position += velocity * delta
-
-func _on_body_entered(body: Node2D) -> void:
-	if body is Soul:
-		body.hurt()

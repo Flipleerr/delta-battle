@@ -25,8 +25,8 @@ func _physics_process(delta: float) -> void:
 			velocity *= 0.5
 	move_and_slide()
 
-func hurt() -> void:
-	get_parent().hurt()
+func hurt(p_damage: int) -> void:
+	get_parent().hurt(5 * p_damage)
 
 func _on_tp_range_area_entered(_area: Area2D) -> void:
 	Global.tp += 1
