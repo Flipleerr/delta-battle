@@ -22,6 +22,9 @@ var context := CONTEXT.BATTLE:
 				$ActSelect.focused = false
 			CONTEXT.MAGIC_SELECT:
 				$MagicSelect.focused = false
+			CONTEXT.ACTION:
+				for character: Character in Global.characters:
+					character.idle()
 		context = p_context
 		match context:
 			CONTEXT.BATTLE:

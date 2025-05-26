@@ -9,8 +9,13 @@ var focused := false:
 		selected_item = selected_item
 var selected_item := 0:
 	set(p_selected_item):
-		monster_panels[selected_item].set_select(false)
-		Global.monsters[monster_panels[selected_item].monster_id].set_selected(false)
+		if monster_panels.is_empty():
+			initialize_panels()
+			selected_item = 0
+			return
+		if monster_panels[selected_item]:
+			monster_panels[selected_item].set_select(false)
+			Global.monsters[monster_panels[selected_item].monster_id].set_selected(false)
 		selected_item = p_selected_item
 		monster_panels[selected_item].set_select(true)
 		Global.monsters[monster_panels[selected_item].monster_id].set_selected(true and focused)

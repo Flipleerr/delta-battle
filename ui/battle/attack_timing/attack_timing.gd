@@ -39,7 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				active_timings.erase(timing)
 		if active_timings.is_empty():
 			handle_input = false
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(1.0).timeout
 			handle_input = true
 			focused = false
 			get_parent().do_next_action()

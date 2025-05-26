@@ -35,11 +35,12 @@ func prep_attack() -> void:
 
 func do_attack(p_monster: Monster, p_damage: int) -> void:
 	p_monster.take_damage(p_damage)
+	p_monster.damage_or_die_animation()
 
 func prep_act() -> void:
 	pass
 
-func do_act(p_monster: Monster, p_act: int) -> void:
+func do_act(_p_monster: Monster, _p_act: int) -> void:
 	pass
 
 func defend() -> void:
