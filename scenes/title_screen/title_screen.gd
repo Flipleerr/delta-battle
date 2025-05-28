@@ -19,7 +19,7 @@ func _on_play_pressed() -> void:
 	Global.items = [
 		dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy
 	]
-	get_tree().change_scene_to_file("res://scenes/battle/battle.tscn")
+	Global.change_to_scene("res://scenes/battle/battle.tscn")
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

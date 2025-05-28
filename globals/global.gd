@@ -38,3 +38,12 @@ func get_opening_line() -> String:
 func kill_monster(p_monster: Monster) -> void:
 	monsters[monsters.find(p_monster)] = null
 	monster_killed.emit()
+
+func change_to_scene(scene_path: String) -> void:
+	PostProcessing.fade_out()
+	get_tree().paused = true
+	await PostProcessing.fade_finished
+	get_tree().change_scene_to_file(scene_path)
+	PostProcessing.fade_in()
+	await PostProcessing.fade_finished
+	get_tree().paused = false
