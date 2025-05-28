@@ -46,3 +46,7 @@ func revive() -> void:
 	alive = true
 	$AnimationPlayer.play("RESET")
 	$AnimationPlayer.play("idle")
+
+func hurt(p_damage: int) -> void:
+	shake_sprite(4.0)
+	super(p_damage)
