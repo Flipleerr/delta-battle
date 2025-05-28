@@ -22,24 +22,27 @@ func set_as_attacking(p_char: int, p_is_attacking: bool) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("confirm") and event.is_pressed() and focused and handle_input:
-		var closest_timings: Array[CharTiming] = []
-		for timing: CharTiming in active_timings:
-			if closest_timings.is_empty():
-				closest_timings.append(timing)
-				continue
-			if is_equal_approx(closest_timings[0].indicator.position.x, timing.indicator.position.x):
-				closest_timings.append(timing)
-			elif closest_timings[0].indicator.position.x > timing.indicator.position.x:
-				closest_timings.clear()
-				closest_timings.append(timing)
-		if closest_timings[0].indicator.position.x < 202.0:
-			for timing: CharTiming in closest_timings:
-				var damage := timing.hit()
-				get_parent().do_attack(timing.char_id, damage)
-				active_timings.erase(timing)
-		if active_timings.is_empty():
-			handle_input = false
-			await get_tree().create_timer(1.0).timeout
-			handle_input = true
-			focused = false
-			get_parent().do_next_action()
+		hit()
+
+func hit() -> void:
+	var closest_timings: Array[CharTiming] = []
+	for timing: CharTiming in active_timings:
+		if closest_timings.is_empty():
+			closest_timings.append(timing)
+			continue
+		if is_equal_approx(closest_timings[0].indicator.position.x, timing.indicator.position.x):
+			closest_timings.append(timing)
+		elif closest_timings[0].indicator.position.x > timing.indicator.position.x:
+			closest_timings.clear()
+			closest_timings.append(timing)
+	if closest_timings[0].indicator.position.x < 202.0:
+		for timing: CharTiming in closest_timings:
+			var damage := timing.hit()
+			get_parent().do_attack(timing.char_id, damage)
+			active_timings.erase(timing)
+	if active_timings.is_empty():
+		handle_input = false
+		await get_tree().create_timer(1.0).timeout
+		handle_input = true
+		focused = false
+		get_parent().do_next_action()

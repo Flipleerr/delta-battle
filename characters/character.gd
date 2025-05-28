@@ -12,6 +12,7 @@ class_name Character
 @export var icon: Texture2D = preload("res://ui/battle/char_menu/res/sample_char_icon.png")
 
 var alive := true
+var defending := false
 signal health_changed(p_new_health: int)
 
 func _ready() -> void:
@@ -42,7 +43,7 @@ func do_attack(p_monster: Monster, p_damage: int) -> void:
 	p_monster.damage_or_die_animation()
 
 func hurt(p_damage: int) -> void:
-	p_damage = maxi(1, p_damage - 3 * defense)
+	p_damage = int(maxi(1, p_damage - 3 * defense) * (1.0 if !defending else 2.0 / 3.0))
 	current_hp -= p_damage
 	health_changed.emit(current_hp)
 	var new_text := preload("res://ui/battle/floating_text/floating_text.tscn").instantiate()
@@ -54,8 +55,24 @@ func hurt(p_damage: int) -> void:
 func faint() -> void:
 	alive = false
 
+func heal(p_amount: int) -> void:
+	current_hp += p_amount
+	var new_text := preload("res://ui/battle/floating_text/floating_text.tscn").instantiate()
+	if !alive and current_hp > 0:
+		revive()
+	if current_hp >= max_hp:
+		current_hp = max_hp
+		new_text.initialize(global_position, "MAX", Global.GREEN)
+	else:
+		new_text.initialize(global_position, str(p_amount), icon_color)
+	get_tree().current_scene.add_child(new_text)
+	health_changed.emit(current_hp)
+
 func revive() -> void:
+	if current_hp < max_hp * 0.17:
+		current_hp = ceili(max_hp * 0.17)
 	alive = true
+	idle()
 
 func prep_act() -> void:
 	pass
@@ -64,4 +81,4 @@ func do_act(_p_monster: Monster, _p_act: int) -> void:
 	pass
 
 func defend() -> void:
-	pass
+	defending = true

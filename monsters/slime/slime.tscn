@@ -13,8 +13,8 @@ script = ExtResource("1_r1nth")
 title = "Slime"
 current_hp = 130
 max_hp = 130
-strength = 9
-defense = 2
+strength = 7
+defense = 3
 main_sprite = NodePath("Sprite")
 metadata/_custom_type_script = "uid://c7cl86f4gnd2b"
 

@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Delta Battle"
 config/description="A recreation of Deltarune's combat system in Godot (https://github.com/DevPoodle/delta-battle)"
+config/tags=PackedStringArray("top_down_2d")
 run/main_scene="uid://b53ljrv0fb6u4"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=30

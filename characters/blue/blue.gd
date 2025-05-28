@@ -36,6 +36,7 @@ func do_act(_p_monster: Monster, _p_act: int) -> void:
 
 func defend() -> void:
 	$AnimationPlayer.play("defend")
+	defending = true
 
 func faint() -> void:
 	alive = false

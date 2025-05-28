@@ -24,7 +24,17 @@ var context := CONTEXT.BATTLE:
 				$MagicSelect.focused = false
 			CONTEXT.ACTION:
 				for character: Character in Global.characters:
-					character.idle()
+					if character.alive and !character.defending:
+						character.idle()
+			CONTEXT.BATTLE:
+				for character: Character in Global.characters:
+					if character.alive and character.defending:
+						character.idle()
+						character.defending = false
+					elif !character.alive:
+						character.heal(ceili(character.max_hp * 0.13))
+				for char_menu: CharMenu in char_menus:
+					char_menu.deconfirm_action()
 		context = p_context
 		match context:
 			CONTEXT.BATTLE:
@@ -57,7 +67,8 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.ACTION:
 				$TextBox.hide_text()
 				for char_menu: CharMenu in char_menus:
-					char_menu.deconfirm_action()
+					if char_menu.selected_item != Global.DEFEND:
+						char_menu.deconfirm_action()
 				current_char = -1
 				do_next_action()
 
@@ -158,7 +169,20 @@ func queue_character_action() -> void:
 			next_char()
 
 func next_char() -> void:
-	if current_char == char_menus.size() - 1:
+	if context == CONTEXT.ACTION:
+		for character: Character in Global.characters:
+			if !character.alive:
+				character.heal(ceili(character.max_hp * 0.13))
+	
+	var next_character := current_char + 1
+	var valid_char := false
+	while next_character < char_menus.size():
+		if Global.characters[next_character].alive:
+			valid_char = true
+			break
+		next_character += 1
+	
+	if !valid_char:
 		char_menus[current_char].confirm_action(actions[current_char].what)
 		char_menus[current_char].deactivate()
 		context = CONTEXT.ACTION
@@ -166,7 +190,7 @@ func next_char() -> void:
 		if current_char != -1:
 			char_menus[current_char].deactivate()
 			char_menus[current_char].confirm_action(actions[current_char].what)
-		current_char += 1
+		current_char = next_character
 		context = CONTEXT.CHAR_MENU
 
 func do_next_action() -> void:
@@ -174,7 +198,7 @@ func do_next_action() -> void:
 		var fighting_characters := PackedInt32Array()
 		for i: int in actions.size():
 			var action := actions[i]
-			if action.what == Global.FIGHT:
+			if action.what == Global.FIGHT and Global.characters[i].alive:
 				fighting_characters.append(i)
 				$AttackTiming.set_as_attacking(i, true)
 			else:
@@ -185,9 +209,13 @@ func do_next_action() -> void:
 		else:
 			do_next_action()
 		return
-	if current_char == char_menus.size():
+	if current_char >= char_menus.size():
 		current_char = 0
 		context = CONTEXT.BATTLE
+		return
+	if !Global.characters[current_char].alive:
+		current_char += 1
+		do_next_action()
 		return
 	match actions[current_char].what:
 		Global.FIGHT:

@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 		if indicator.position.x < 64.0:
 			create_shadow()
 			indicator.visible = false
-			Input.action_press("confirm")
+			get_parent().get_parent().hit()
 
 func create_shadow() -> void:
 	var new_shadow: Panel = indicator.duplicate()

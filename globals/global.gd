@@ -5,6 +5,7 @@ enum {
 }
 
 const YELLOW := Color("#ffff00")
+const GREEN := Color("#00ff00")
 var tp := 0.0:
 	set(p_tp):
 		tp = minf(p_tp, 100.0)
