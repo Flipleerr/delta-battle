@@ -1,7 +1,7 @@
 extends Node2D
 
 enum CONTEXT {
-	BATTLE, CHAR_MENU, MONSTER_SELECT, ITEM_SELECT, ACT_SELECT, MAGIC_SELECT, CHAR_SELECT, ACTION, WON
+	BATTLE, CHAR_MENU, MONSTER_SELECT, CHAR_SELECT, ITEM_SELECT, ACT_SELECT, MAGIC_SELECT, ACTION, WON
 }
 
 class Action:
@@ -16,6 +16,8 @@ var context := CONTEXT.BATTLE:
 				char_menus[current_char].focused = false
 			CONTEXT.MONSTER_SELECT:
 				$MonsterSelect.focused = false
+			CONTEXT.CHAR_SELECT:
+				$CharSelect.focused = false
 			CONTEXT.ITEM_SELECT:
 				$ItemSelect.focused = false
 			CONTEXT.ACT_SELECT:
@@ -35,6 +37,13 @@ var context := CONTEXT.BATTLE:
 						character.heal(ceili(character.max_hp * 0.13))
 				for char_menu: CharMenu in char_menus:
 					char_menu.deconfirm_action()
+				for i: int in Global.items.size():
+					if Global.items[i] == null:
+						Global.items.remove_at(i)
+						i -= 1
+				$ItemSelect.reset_items()
+				for item: Item in Global.items:
+					$ItemSelect.add_item(item.name, item.short_description)
 		context = p_context
 		match context:
 			CONTEXT.BATTLE:
@@ -46,6 +55,10 @@ var context := CONTEXT.BATTLE:
 				$MonsterSelect.visible = true
 				$MonsterSelect.focused = true
 				$MonsterSelect.selected_item = 0
+			CONTEXT.CHAR_SELECT:
+				$CharSelect.visible = true
+				$CharSelect.focused = true
+				$CharSelect.selected_item = 0
 			CONTEXT.ITEM_SELECT:
 				$ItemSelect.visible = true
 				$ItemSelect.focused = true
@@ -119,7 +132,19 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
 					context = CONTEXT.ACT_SELECT
 					return
+				if actions[current_char].what == Global.SPARE:
+					Global.characters[current_char].prep_spare()
+					next_char()
+					return
 				Global.characters[current_char].prep_attack()
+				next_char()
+				return
+			CONTEXT.CHAR_SELECT:
+				if event.is_action("cancel"):
+					context = CONTEXT.CHAR_MENU
+					return
+				actions[current_char].to = $CharSelect.selected_item
+				Global.characters[current_char].prep_item()
 				next_char()
 				return
 			CONTEXT.ACT_SELECT:
@@ -143,7 +168,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.CHAR_MENU
 					return
 				actions[current_char].specific = $ItemSelect.selected_item
-				next_char()
+				context = CONTEXT.CHAR_SELECT
 				return
 
 func queue_character_action() -> void:
@@ -223,14 +248,26 @@ func do_next_action() -> void:
 			do_next_action()
 			return
 		Global.ACT:
+			Global.characters[current_char].do_act(
+				Global.monsters[actions[current_char].to], actions[current_char].specific
+			)
+			await Global.characters[current_char].act_finished
 			current_char += 1
 			do_next_action()
 			return
 		Global.ITEM:
+			Global.characters[current_char].use_item(
+				Global.characters[actions[current_char].to], actions[current_char].specific
+			)
+			await Global.characters[current_char].item_used
 			current_char += 1
 			do_next_action()
 			return
 		Global.SPARE:
+			Global.characters[current_char].do_spare(
+				Global.monsters[actions[current_char].to]
+			)
+			await Global.characters[current_char].spare_finished
 			current_char += 1
 			do_next_action()
 			return

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dh7u53yj0xavd"]
+[gd_scene load_steps=9 format=3 uid="uid://dh7u53yj0xavd"]
 
 [ext_resource type="Script" uid="uid://dexbpui8jgwli" path="res://ui/battle/bottom_panel/bottom_panel.gd" id="1_11je6"]
 [ext_resource type="PackedScene" uid="uid://c5cnxltgwop68" path="res://ui/text_box/text_box.tscn" id="1_sd2ip"]
 [ext_resource type="PackedScene" uid="uid://bn7o6vx5tirfh" path="res://ui/battle/monster_select/monster_select.tscn" id="3_rmodj"]
 [ext_resource type="PackedScene" uid="uid://cw777caepj6ix" path="res://ui/battle/two_col_select/two_col_select.tscn" id="4_11je6"]
+[ext_resource type="PackedScene" uid="uid://c0460juclptxn" path="res://ui/battle/char_select/char_select.tscn" id="4_mnjw6"]
 [ext_resource type="PackedScene" uid="uid://blakyaaofibec" path="res://ui/battle/attack_timing/attack_timing.tscn" id="5_y2sg7"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7giy0"]
@@ -23,6 +24,9 @@ text = "  * This is sample text...
   * This isn't sample text, it's real."
 
 [node name="MonsterSelect" parent="." instance=ExtResource("3_rmodj")]
+visible = false
+
+[node name="CharSelect" parent="." instance=ExtResource("4_mnjw6")]
 visible = false
 
 [node name="ItemSelect" parent="." instance=ExtResource("4_11je6")]

@@ -14,8 +14,21 @@ class_name Character
 var alive := true
 var defending := false
 signal health_changed(p_new_health: int)
+signal act_finished
+signal item_used
+signal spare_finished
+
+@export_node_path("Sprite2D") var main_sprite
+var sprite: Sprite2D
+var mat: ShaderMaterial
 
 func _ready() -> void:
+	if !main_sprite:
+		return
+	sprite = get_node(main_sprite)
+	mat = ShaderMaterial.new()
+	mat.shader = preload("res://characters/generic_character.gdshader")
+	sprite.material = mat
 	await get_tree().create_timer(randf_range(0.0, 0.6)).timeout
 	idle()
 
@@ -78,7 +91,27 @@ func prep_act() -> void:
 	pass
 
 func do_act(_p_monster: Monster, _p_act: int) -> void:
+	act_finished.emit()
+
+func prep_item() -> void:
 	pass
+
+func use_item(p_character: Character, p_item: int) -> void:
+	var item := Global.items[p_item]
+	match item.type:
+		Item.TYPE.HEAL:
+			p_character.heal(item.amount)
+			Global.delete_item(p_item)
+	item_used.emit()
+
+func prep_spare() -> void:
+	pass
+
+func do_spare(_p_monster: Monster) -> void:
+	spare_finished.emit()
 
 func defend() -> void:
 	defending = true
+
+func set_selected(_p_selected: bool) -> void:
+	pass

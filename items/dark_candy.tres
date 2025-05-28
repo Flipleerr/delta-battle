@@ -7,4 +7,6 @@ script = ExtResource("1_qqsxe")
 name = "Dark Candy"
 short_description = "Heals 40HP"
 long_description = "Heals 40 HP. A red-and-black star that tastes like marshmallows."
+type = 1
+amount = 40
 metadata/_custom_type_script = "uid://bvr1ds1qijb0w"

@@ -39,6 +39,9 @@ func kill_monster(p_monster: Monster) -> void:
 	monsters[monsters.find(p_monster)] = null
 	monster_killed.emit()
 
+func delete_item(p_item: int) -> void:
+	items[p_item] = null
+
 func change_to_scene(scene_path: String) -> void:
 	PostProcessing.fade_out()
 	get_tree().paused = true

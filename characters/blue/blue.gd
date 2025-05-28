@@ -33,6 +33,28 @@ func prep_act() -> void:
 
 func do_act(_p_monster: Monster, _p_act: int) -> void:
 	$AnimationPlayer.play("act")
+	await $AnimationPlayer.animation_finished
+	idle()
+	act_finished.emit()
+
+func prep_item() -> void:
+	$AnimationPlayer.play("prep_act")
+
+func use_item(p_character: Character, p_item: int) -> void:
+	$AnimationPlayer.play("act")
+	await $AnimationPlayer.animation_finished
+	super(p_character, p_item)
+	idle()
+	item_used.emit()
+
+func prep_spare() -> void:
+	$AnimationPlayer.play("prep_act")
+
+func do_spare(_p_monster: Monster) -> void:
+	$AnimationPlayer.play("act")
+	await $AnimationPlayer.animation_finished
+	idle()
+	spare_finished.emit()
 
 func defend() -> void:
 	$AnimationPlayer.play("defend")
