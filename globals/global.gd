@@ -14,26 +14,9 @@ var tp := 0.0:
 signal tp_changed
 signal monster_killed
 
-var characters: Array[Character] = [
-	preload("res://characters/blue/blue.tscn").instantiate(),
-	preload("res://characters/blue/blue.tscn").instantiate(),
-	preload("res://characters/blue/blue.tscn").instantiate()
-]
-var monsters: Array[Monster] = [
-	preload("res://monsters/slime/slime.tscn").instantiate(),
-	preload("res://monsters/slime/slime.tscn").instantiate()
-]
-var items: Array[Item] = [
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres"),
-	preload("res://items/dark_candy.tres")
-]
+var characters: Array[Character] = []
+var monsters: Array[Monster] = []
+var items: Array[Item] = []
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
