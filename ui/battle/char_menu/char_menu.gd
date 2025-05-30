@@ -41,6 +41,11 @@ var focused := false:
 	set(p_focused):
 		focused = p_focused
 		selected_item = selected_item
+		can_spare = false
+		for monster: Monster in Global.monsters:
+			if monster != null and monster.mercy_percent >= 1.0:
+				can_spare = true
+				return
 var selected_item := 0:
 	set(p_selected_item):
 		actions[selected_item].selected = false

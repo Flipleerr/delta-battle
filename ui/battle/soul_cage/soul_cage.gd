@@ -47,9 +47,11 @@ func _process(delta: float) -> void:
 		z_offset += 1
 		$Copies.add_child(new_panel)
 	if $Copies.get_child_count() != 0:
+		var children := $Copies.get_child_count()
 		for child: Panel in $Copies.get_children():
 			child.modulate.a -= 5.0 * delta
 			if child.modulate.a <= 0.0:
-				if $Copies.get_child_count() == 1:
-					finished_animation.emit()
 				child.queue_free()
+				children -= 1
+		if children <= 0:
+			finished_animation.emit()

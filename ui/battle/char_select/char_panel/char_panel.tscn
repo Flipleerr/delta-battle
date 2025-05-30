@@ -18,6 +18,7 @@ offset_bottom = 30.0
 script = ExtResource("1_ey76b")
 
 [node name="Title" type="Label" parent="."]
+layout_mode = 0
 offset_left = 80.0
 offset_top = -1.0
 offset_right = 415.0
@@ -42,6 +43,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ey76b")
 
 [node name="HPFG" type="Panel" parent="."]
 custom_minimum_size = Vector2(81, 16)
+layout_mode = 0
 offset_left = 420.0
 offset_top = 4.0
 offset_right = 501.0

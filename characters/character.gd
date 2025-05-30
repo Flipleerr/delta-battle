@@ -17,6 +17,7 @@ signal health_changed(p_new_health: int)
 signal act_finished
 signal item_used
 signal spare_finished
+signal faint_finished
 
 @export_node_path("Sprite2D") var main_sprite
 var sprite: Sprite2D
@@ -34,9 +35,7 @@ func _ready() -> void:
 
 ## Override function
 func get_acts() -> Array[Act]:
-	var nothing := Act.new()
-	nothing.title = "Do nothing"
-	return [nothing]
+	return [Act.new("Check")]
 
 ## Override function
 func get_spells() -> Array[Spell]:
@@ -59,26 +58,23 @@ func hurt(p_damage: int) -> void:
 	p_damage = int(maxi(1, p_damage - 3 * defense) * (1.0 if !defending else 2.0 / 3.0))
 	current_hp -= p_damage
 	health_changed.emit(current_hp)
-	var new_text := preload("res://ui/battle/floating_text/floating_text.tscn").instantiate()
-	new_text.initialize(global_position, str(p_damage), icon_color)
-	get_tree().current_scene.add_child(new_text)
+	create_text(str(p_damage), Color.WHITE)
 	if current_hp < 0:
 		faint()
 
 func faint() -> void:
 	alive = false
+	faint_finished.emit()
 
 func heal(p_amount: int) -> void:
 	current_hp += p_amount
-	var new_text := preload("res://ui/battle/floating_text/floating_text.tscn").instantiate()
 	if !alive and current_hp > 0:
 		revive()
 	if current_hp >= max_hp:
 		current_hp = max_hp
-		new_text.initialize(global_position, "MAX", Global.GREEN)
+		create_text("MAX", Global.GREEN)
 	else:
-		new_text.initialize(global_position, str(p_amount), icon_color)
-	get_tree().current_scene.add_child(new_text)
+		create_text(str(p_amount), icon_color)
 	health_changed.emit(current_hp)
 
 func revive() -> void:
@@ -91,6 +87,8 @@ func prep_act() -> void:
 	pass
 
 func do_act(_p_monster: Monster, _p_act: int) -> void:
+	Global.display_text.emit(title + " did nothing...", true)
+	await Global.text_finished
 	act_finished.emit()
 
 func prep_item() -> void:
@@ -98,20 +96,47 @@ func prep_item() -> void:
 
 func use_item(p_character: Character, p_item: int) -> void:
 	var item := Global.items[p_item]
+	if item == null:
+		Global.display_text.emit(title + " tried to use an item that was already used", true)
+		await Global.text_finished
+		item_used.emit()
+		return
 	match item.type:
+		Item.TYPE.NONE:
+			Global.display_text.emit("  * " + title + " used the " + item.name + ".", true)
+			await Global.text_finished
+			await get_tree().create_timer(0.01).timeout
+			Global.display_text.emit("  * But nothing happened...", true)
 		Item.TYPE.HEAL:
 			p_character.heal(item.amount)
+			Global.display_text.emit("  * " + title + " used the " + item.name + "!", true)
 			Global.delete_item(p_item)
+	await Global.text_finished
 	item_used.emit()
 
 func prep_spare() -> void:
 	pass
 
-func do_spare(_p_monster: Monster) -> void:
+func do_spare(p_monster: Monster) -> void:
+	if p_monster.mercy_percent >= 1.0:
+		p_monster.spare()
+		await get_tree().create_timer(0.01).timeout
+		Global.display_text.emit("  * " + title + " spared " + p_monster.title + "!", true)
+		await Global.text_finished
+	else:
+		Global.display_text.emit("  * " + title + " tried to spare " + p_monster.title + ", but couldn't...", true)
+		await Global.text_finished
 	spare_finished.emit()
 
 func defend() -> void:
 	defending = true
 
-func set_selected(_p_selected: bool) -> void:
-	pass
+func set_selected(p_selected: bool) -> void:
+	if !mat:
+		return
+	mat.set_shader_parameter("flash", float(p_selected))
+
+func create_text(p_text: String, p_color: Color) -> void:
+	var new_text := preload("res://ui/battle/floating_text/floating_text.tscn").instantiate()
+	new_text.initialize(global_position, p_text, p_color)
+	get_tree().current_scene.add_child(new_text)

@@ -19,9 +19,8 @@ script = ExtResource("1_11je6")
 [node name="TextBox" parent="." instance=ExtResource("1_sd2ip")]
 custom_minimum_size = Vector2(640, 115)
 theme_override_styles/normal = SubResource("StyleBoxEmpty_7giy0")
-text = "  * This is sample text...
-  * This is sample text...
-  * This isn't sample text, it's real."
+bbcode_enabled = true
+text = "  * This is sample text"
 
 [node name="MonsterSelect" parent="." instance=ExtResource("3_rmodj")]
 visible = false

@@ -30,17 +30,14 @@ var context := CONTEXT.BATTLE:
 						character.idle()
 			CONTEXT.BATTLE:
 				for character: Character in Global.characters:
-					if character.alive and character.defending:
+					if !character.alive:
+						character.heal(ceili(character.max_hp * 0.13))
+					if character.defending and character.alive:
 						character.idle()
 						character.defending = false
-					elif !character.alive:
-						character.heal(ceili(character.max_hp * 0.13))
 				for char_menu: CharMenu in char_menus:
 					char_menu.deconfirm_action()
-				for i: int in Global.items.size():
-					if Global.items[i] == null:
-						Global.items.remove_at(i)
-						i -= 1
+				Global.items.erase(null)
 				$ItemSelect.reset_items()
 				for item: Item in Global.items:
 					$ItemSelect.add_item(item.name, item.short_description)
@@ -62,21 +59,21 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.ITEM_SELECT:
 				$ItemSelect.visible = true
 				$ItemSelect.focused = true
-				$ItemSelect.selected_item = 0
+				$ItemSelect.selected_coords = Vector2.ZERO
 			CONTEXT.ACT_SELECT:
 				$ActSelect.reset_items()
 				for act: Act in Global.characters[current_char].get_acts():
 					$ActSelect.add_item(act.title)
 				$ActSelect.visible = true
 				$ActSelect.focused = true
-				$ActSelect.selected_item = 0
+				$ActSelect.selected_coords = Vector2.ZERO
 			CONTEXT.MAGIC_SELECT:
 				$MagicSelect.reset_items()
 				for spell: Spell in Global.characters[current_char].get_spells():
 					$MagicSelect.add_item(spell.title, spell.description, spell.tp_cost)
 				$MagicSelect.visible = true
 				$MagicSelect.focused = true
-				$MagicSelect.selected_item = 0
+				$MagicSelect.selected_coords = Vector2.ZERO
 			CONTEXT.ACTION:
 				$TextBox.hide_text()
 				for char_menu: CharMenu in char_menus:
@@ -90,9 +87,6 @@ var current_char := 0
 
 var actions: Array[Action] = []
 
-var waiting_for_text := false
-signal text_finished
-
 func _ready() -> void:
 	for character: Character in Global.characters:
 		var char_menu := preload("res://ui/battle/char_menu/char_menu.tscn").instantiate()
@@ -103,10 +97,9 @@ func _ready() -> void:
 	for item: Item in Global.items:
 		$ItemSelect.add_item(item.name, item.short_description)
 	context = CONTEXT.CHAR_MENU
-	$TextBox.text_finished.connect(text_is_finished)
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if waiting_for_text:
+	if Global.displaying_text and $TextBox.require_input:
 		return
 	if (event.is_action("confirm") or event.is_action("cancel")) and event.is_pressed():
 		match context:
@@ -128,7 +121,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.CHAR_MENU
 					return
-				actions[current_char].to = $MonsterSelect.selected_item
+				actions[current_char].to = $MonsterSelect.get_monster_id()
 				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
 					context = CONTEXT.ACT_SELECT
 					return
@@ -288,15 +281,3 @@ func do_attack(p_char_id: int, p_damage: int) -> void:
 			return
 	var character := Global.characters[p_char_id]
 	character.do_attack(monster, p_damage)
-
-func show_text(p_text: String) -> void:
-	$TextBox.hide_text()
-	$TextBox.text = p_text
-	$TextBox.show_text()
-	waiting_for_text = true
-
-func text_is_finished() -> void:
-	text_finished.emit()
-	waiting_for_text = false
-	if context == CONTEXT.ACTION:
-		do_next_action()

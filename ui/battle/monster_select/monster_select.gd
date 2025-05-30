@@ -13,10 +13,10 @@ var selected_item := 0:
 			initialize_panels()
 			selected_item = 0
 			return
-		if monster_panels[selected_item]:
+		if selected_item < monster_panels.size() and monster_panels[selected_item]:
 			monster_panels[selected_item].set_select(false)
 			Global.monsters[monster_panels[selected_item].monster_id].set_selected(false)
-		selected_item = p_selected_item
+		selected_item = mini(p_selected_item, monster_panels.size() - 1)
 		monster_panels[selected_item].set_select(true)
 		Global.monsters[monster_panels[selected_item].monster_id].set_selected(true and focused)
 var monster_panels: Array[MonsterPanel] = []
@@ -45,3 +45,6 @@ func _unhandled_key_input(p_event: InputEvent) -> void:
 			selected_item = wrapi(selected_item - 1, 0, monster_panels.size())
 		elif p_event.is_action("down"):
 			selected_item =  wrapi(selected_item + 1, 0, monster_panels.size())
+
+func get_monster_id() -> int:
+	return monster_panels[selected_item].monster_id

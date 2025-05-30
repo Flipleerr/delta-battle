@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://gvvlu8b17lwv"]
+
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/res/heart.png" id="1_qeco5"]
+[ext_resource type="Script" uid="uid://cmx566l7n4rnj" path="res://scenes/lost_screen/lost_screen.gd" id="1_yigqx"]
+
+[node name="LostScreen" type="Node2D"]
+script = ExtResource("1_yigqx")
+
+[node name="Lost" type="Label" parent="."]
+custom_minimum_size = Vector2(640, 0)
+offset_top = 82.0
+offset_right = 640.0
+offset_bottom = 242.0
+theme_override_colors/font_color = Color(0.273179, 0.690486, 0.892447, 1)
+theme_override_font_sizes/font_size = 96
+text = " You lost..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Play" type="Button" parent="."]
+custom_minimum_size = Vector2(128, 0)
+offset_left = 215.0
+offset_top = 247.0
+offset_right = 425.0
+offset_bottom = 295.0
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../Quit")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "TRY AGAIN"
+
+[node name="Quit" type="Button" parent="."]
+custom_minimum_size = Vector2(210, 0)
+offset_left = 215.0
+offset_top = 313.0
+offset_right = 425.0
+offset_bottom = 361.0
+focus_neighbor_top = NodePath("../Play")
+focus_neighbor_bottom = NodePath("../Play")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "GIVE UP"
+
+[node name="Heart" type="Sprite2D" parent="."]
+position = Vector2(183, 274)
+scale = Vector2(2, 2)
+texture = ExtResource("1_qeco5")
+
+[connection signal="focus_entered" from="Play" to="." method="_on_play_focus_entered"]
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="focus_entered" from="Quit" to="." method="_on_quit_focus_entered"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

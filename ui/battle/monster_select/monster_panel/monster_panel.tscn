@@ -73,6 +73,7 @@ offset_bottom = 20.0
 theme_override_styles/background = SubResource("StyleBoxFlat_7eb5v")
 theme_override_styles/fill = SubResource("StyleBoxFlat_g7idw")
 max_value = 1.0
+step = 0.001
 show_percentage = false
 
 [node name="MercyText" type="Label" parent="."]
