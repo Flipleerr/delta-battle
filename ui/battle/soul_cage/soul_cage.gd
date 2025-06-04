@@ -10,6 +10,10 @@ var outline_stylebox := preload("res://ui/battle/soul_cage/cage_outline.stylebox
 
 signal finished_animation
 
+func _ready() -> void:
+	await get_tree().create_timer(5.0).timeout
+	expand()
+
 func expand() -> void:
 	$Panel.visible = true
 	expanding = true
