@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 		visible_characters += 1
 		var c := text[visible_characters - 1].to_ascii_buffer()[0]
 		if is_letter_or_number(c):
-			$TypingSound.play()
+			Sounds.play("snd_text_ch1")
 		if visible_ratio >= 1.0 and !require_input:
 			Global.displaying_text = false
 			Global.text_finished.emit()

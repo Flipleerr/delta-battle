@@ -115,12 +115,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					char_menus[current_char].deconfirm_action()
 					Global.characters[current_char].idle()
 					return
+				Sounds.play("snd_select")
 				queue_character_action()
 				return
 			CONTEXT.MONSTER_SELECT:
 				if event.is_action("cancel"):
 					context = CONTEXT.CHAR_MENU
 					return
+				Sounds.play("snd_select")
 				actions[current_char].to = $MonsterSelect.get_monster_id()
 				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
 					context = CONTEXT.ACT_SELECT
@@ -136,6 +138,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.CHAR_MENU
 					return
+				Sounds.play("snd_select")
 				actions[current_char].to = $CharSelect.selected_item
 				Global.characters[current_char].prep_item()
 				next_char()
@@ -144,6 +147,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.MONSTER_SELECT
 					return
+				Sounds.play("snd_select")
 				actions[current_char].specific = $ActSelect.selected_item
 				Global.characters[current_char].prep_act()
 				next_char()
@@ -152,6 +156,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.CHAR_MENU
 					return
+				Sounds.play("snd_select")
 				actions[current_char].specific = $MagicSelect.selected_item
 				Global.characters[current_char].prep_act()
 				next_char()
@@ -160,6 +165,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					context = CONTEXT.CHAR_MENU
 					return
+				Sounds.play("snd_select")
 				actions[current_char].specific = $ItemSelect.selected_item
 				context = CONTEXT.CHAR_SELECT
 				return

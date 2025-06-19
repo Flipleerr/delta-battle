@@ -70,9 +70,15 @@ func _ready() -> void:
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():
 		if p_event.is_action("left"):
+			var prev_item := selected_item
 			selected_item = wrapi(selected_item - 1, 0, 5)
+			if selected_item != prev_item:
+				Sounds.play("snd_menumove")
 		elif p_event.is_action("right"):
+			var prev_item := selected_item
 			selected_item =  wrapi(selected_item + 1, 0, 5)
+			if selected_item != prev_item:
+				Sounds.play("snd_menumove")
 
 func update_hp_color() -> void:
 	if current_hp < 0.2 * $Stats/HealthBar.max_value:

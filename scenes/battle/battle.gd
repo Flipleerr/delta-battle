@@ -4,6 +4,9 @@ func _ready() -> void:
 	set_positions($Characters, Global.characters, Vector2(108.0, 0.0))
 	set_positions($Monsters, Global.monsters, Vector2(640.0 - 108.0, 0.0))
 	Global.display_text.emit(Global.get_opening_line(), false)
+	
+	Sounds.play("snd_impact", 0.7)
+	Sounds.play("snd_weaponpull_fast", 0.8)
 
 func set_positions(parent: Node, nodes: Array, offset := Vector2.ZERO):
 	var size := nodes.size()
@@ -73,3 +76,4 @@ func hurt(p_damage: int) -> void:
 	if alive_characters.size() == 1 and !character.alive:
 		await character.faint_finished
 		Global.change_to_scene("res://scenes/lost_screen/lost_screen.tscn")
+		Sounds.play("snd_break2", 0.6)

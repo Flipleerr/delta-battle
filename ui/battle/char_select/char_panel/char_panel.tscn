@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbuggbug5olof"]
 
-[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/res/heart.png" id="1_e71i2"]
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="1_e71i2"]
 [ext_resource type="Script" uid="uid://lcbxarr5x4i3" path="res://ui/battle/char_select/char_panel/char_panel.gd" id="1_ey76b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ey76b"]

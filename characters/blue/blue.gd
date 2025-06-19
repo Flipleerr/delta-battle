@@ -39,8 +39,7 @@ func do_attack(p_monster: Monster, p_damage: int) -> void:
 	$AnimationPlayer.play("attack")
 	await $AnimationPlayer.animation_finished
 	if p_monster:
-		p_monster.take_damage(self, p_damage)
-		p_monster.damage_or_die_animation()
+		super(p_monster, p_damage)
 	await get_tree().create_timer(0.2).timeout
 	idle()
 

@@ -52,6 +52,7 @@ func _ready() -> void:
 
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():
+		var prev_item := selected_item
 		if p_event.is_action("up"):
 			selected_coords.y = maxi(0, selected_coords.y - 1)
 		elif p_event.is_action("down"):
@@ -66,6 +67,8 @@ func _unhandled_key_input(p_event: InputEvent) -> void:
 			if items.size() % 2 == 1 and selected_item == items.size() - 1:
 				return
 			selected_coords.x = wrapi(selected_coords.x + 1, 0, 2)
+		if prev_item != selected_item:
+			Sounds.play("snd_menumove")
 
 func reset_items() -> void:
 	items.clear()

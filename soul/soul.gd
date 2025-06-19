@@ -31,3 +31,4 @@ func hurt(p_damage: int) -> void:
 func _on_tp_range_area_entered(_area: Area2D) -> void:
 	Global.tp += 1
 	$TPIndicator.modulate.a = 1.0
+	Sounds.play("snd_graze", 0.7)

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dnb5h65wyjvf5"
-path="res://.godot/imported/common_shapes.png-2beb359b7d28ecfbe338a99f54334429.ctex"
+path="res://.godot/imported/common_shapes.png-12ef57a183fd073408ac67565cca3522.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://globals/res/common_shapes.png"
-dest_files=["res://.godot/imported/common_shapes.png-2beb359b7d28ecfbe338a99f54334429.ctex"]
+source_file="res://globals/global/res/common_shapes.png"
+dest_files=["res://.godot/imported/common_shapes.png-12ef57a183fd073408ac67565cca3522.ctex"]
 
 [params]
 

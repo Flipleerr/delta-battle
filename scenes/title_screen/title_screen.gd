@@ -9,11 +9,14 @@ func _ready() -> void:
 
 func _on_play_focus_entered() -> void:
 	$Heart.position = $Play.position + Vector2(-16.0, 48.0 / 2.0 + 2.0)
+	Sounds.play("snd_menumove")
 
 func _on_quit_focus_entered() -> void:
 	$Heart.position = $Quit.position + Vector2(-16.0, 48.0 / 2.0 + 2.0)
+	Sounds.play("snd_menumove")
 
 func _on_play_pressed() -> void:
+	Sounds.play("snd_select")
 	Global.characters = [blue_scene.instantiate(), blue_scene.instantiate(), blue_scene.instantiate()]
 	Global.monsters = [slime_scene.instantiate(), slime_scene.instantiate()]
 	Global.items = [

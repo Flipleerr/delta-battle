@@ -38,7 +38,10 @@ func initialize_panels() -> void:
 
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():
+		var prev_item := selected_item
 		if p_event.is_action("up"):
 			selected_item = wrapi(selected_item - 1, 0, char_panels.size())
 		elif p_event.is_action("down"):
 			selected_item =  wrapi(selected_item + 1, 0, char_panels.size())
+		if prev_item != selected_item:
+			Sounds.play("snd_menumove")

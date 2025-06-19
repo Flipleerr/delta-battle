@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bbtunvii0ogrj"]
 
 [ext_resource type="Script" uid="uid://covpvcqb3xwai" path="res://scenes/win_screen/win_screen.gd" id="1_misvs"]
-[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/res/heart.png" id="2_1d1ta"]
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="2_1d1ta"]
 
 [node name="WinScreen" type="Node2D"]
 script = ExtResource("1_misvs")

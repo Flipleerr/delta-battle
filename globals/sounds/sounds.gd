@@ -1,0 +1,31 @@
+extends Node
+
+var sounds: Dictionary[String, AudioStreamPlayer] = {}
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	var sound_files := get_files_recursive("res://globals/sounds/sound_effects")
+	for file: String in sound_files:
+		var audio_player := AudioStreamPlayer.new()
+		audio_player.name = file.get_file().trim_suffix("." + file.get_extension())
+		audio_player.stream = load(file)
+		add_child(audio_player)
+		sounds.set(audio_player.name, audio_player)
+
+func get_files_recursive(p_directory: String) -> PackedStringArray:
+	var files := PackedStringArray()
+	for dir: String in DirAccess.get_directories_at(p_directory):
+		files.append_array(get_files_recursive(p_directory + "/" + dir))
+	for file: String in DirAccess.get_files_at(p_directory):
+		if file.get_extension() != "import":
+			files.append(p_directory + "/" + file)
+	return files
+
+func play(p_sound: String, p_volume := 1.0) -> void:
+	if !sounds.has(p_sound):
+		printerr("Error in sounds.gd: Attempt to play sound, \"" + p_sound + "\", but no such sound exists.")
+		return
+	var audio_player := sounds[p_sound]
+	audio_player.volume_linear = p_volume
+	audio_player.play()

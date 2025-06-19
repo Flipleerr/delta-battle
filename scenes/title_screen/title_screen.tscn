@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c63ai4f4lswbf" path="res://ui/theme/res/horizontal_logo.png" id="1_5df70"]
 [ext_resource type="Script" uid="uid://c1giws8uwqx1o" path="res://scenes/title_screen/title_screen.gd" id="1_ri6bm"]
-[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/res/heart.png" id="2_vuv2h"]
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="2_vuv2h"]
 
 [node name="TitleScreen" type="Node2D"]
 script = ExtResource("1_ri6bm")

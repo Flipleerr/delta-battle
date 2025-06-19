@@ -51,14 +51,17 @@ func prep_attack() -> void:
 	pass
 
 func do_attack(p_monster: Monster, p_damage: int) -> void:
-	p_monster.take_damage(self, p_damage)
-	p_monster.damage_or_die_animation()
+	if p_monster and !p_monster.dying:
+		p_monster.take_damage(self, p_damage)
+		p_monster.damage_or_die_animation()
+		Sounds.play("snd_laz_c")
 
 func hurt(p_damage: int) -> void:
 	p_damage = int(maxi(1, p_damage - 3 * defense) * (1.0 if !defending else 2.0 / 3.0))
 	current_hp -= p_damage
 	health_changed.emit(current_hp)
 	create_text(str(p_damage), Color.WHITE)
+	Sounds.play("snd_hurt1")
 	if current_hp < 0:
 		faint()
 
@@ -68,6 +71,7 @@ func faint() -> void:
 
 func heal(p_amount: int) -> void:
 	current_hp += p_amount
+	Sounds.play("snd_power")
 	if !alive and current_hp > 0:
 		revive()
 	if current_hp >= max_hp:
@@ -123,6 +127,7 @@ func do_spare(p_monster: Monster) -> void:
 		await get_tree().create_timer(0.01).timeout
 		Global.display_text.emit("  * " + title + " spared " + p_monster.title + "!", true)
 		await Global.text_finished
+		Sounds.play("snd_spare")
 	else:
 		Global.display_text.emit("  * " + title + " tried to spare " + p_monster.title + ", but couldn't...", true)
 		await Global.text_finished
