@@ -9,7 +9,7 @@ const GREEN := Color("#00ff00")
 const CENTER := Vector2(308.0, 171.0)
 var tp := 0.0:
 	set(p_tp):
-		tp = minf(p_tp, 100.0)
+		tp = minf(p_tp, 250.0)
 		tp_changed.emit()
 
 signal tp_changed

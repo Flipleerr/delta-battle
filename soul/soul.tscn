@@ -30,3 +30,4 @@ modulate = Color(1, 1, 1, 0)
 texture = ExtResource("3_53ixt")
 
 [connection signal="area_entered" from="TPRange" to="." method="_on_tp_range_area_entered"]
+[connection signal="area_exited" from="TPRange" to="." method="_on_tp_range_area_exited"]
