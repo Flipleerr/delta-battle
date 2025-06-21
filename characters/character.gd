@@ -129,6 +129,7 @@ func do_spare(p_monster: Monster) -> void:
 		await Global.text_finished
 		Sounds.play("snd_spare")
 	else:
+		await get_tree().create_timer(0.01).timeout
 		Global.display_text.emit("  * " + title + " tried to spare " + p_monster.title + ", but couldn't...", true)
 		await Global.text_finished
 	spare_finished.emit()
