@@ -67,6 +67,8 @@ func spare() -> void:
 	exit_finished.emit()
 	queue_free()
 
-func do_attack() -> void:
-	await get_tree().create_timer(0.01).timeout
-	attack_finished.emit()
+func start_attack() -> float:
+	return 0.0
+
+func end_attack() -> void:
+	pass

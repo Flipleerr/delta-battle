@@ -1,5 +1,8 @@
 extends Node2D
 
+var in_attack := false
+var turn_timer := 0.0
+
 func _ready() -> void:
 	set_positions($Characters, Global.characters, Vector2(108.0, 0.0))
 	set_positions($Monsters, Global.monsters, Vector2(640.0 - 108.0, 0.0))
@@ -8,6 +11,13 @@ func _ready() -> void:
 	Sounds.play("snd_impact", 0.7)
 	Sounds.play("snd_weaponpull_fast", 0.8)
 	Sounds.set_music("battle", 0.7)
+
+func _process(delta: float) -> void:
+	if in_attack:
+		turn_timer -= delta
+		if turn_timer <= 0.0:
+			in_attack = false
+			end_attack()
 
 func set_positions(parent: Node, nodes: Array, offset := Vector2.ZERO):
 	var size := nodes.size()
@@ -45,11 +55,14 @@ func start_attack() -> void:
 		if monster != null:
 			alive_monsters.append(monster)
 	var monster: Monster = alive_monsters.pick_random()
-	monster.do_attack()
-	await monster.attack_finished
-	end_attack()
-	
+	turn_timer = monster.start_attack()
+	in_attack = true
+
 func end_attack() -> void:
+	for monster: Monster in Global.monsters:
+		if monster != null:
+			monster.end_attack()
+	
 	$Soul.active = false
 	var tween := get_tree().create_tween()
 	tween.tween_property($Soul, "position", ($Characters.get_child(0) as Character).position, 0.25)

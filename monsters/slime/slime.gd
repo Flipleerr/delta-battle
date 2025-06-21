@@ -6,6 +6,8 @@ var velocity := 0.0
 var squishing := false
 var hurting := false
 
+var attacks: Array[Node2D] = []
+
 func shake_sprite(amount: float) -> void:
 	shake = amount
 
@@ -76,7 +78,7 @@ func spare() -> void:
 	await $AnimationPlayer.animation_finished
 	super()
 
-func do_attack() -> void:
+func start_attack() -> float:
 	var another_slime := false
 	for monster: Monster in Global.monsters:
 		if monster == self:
@@ -84,21 +86,19 @@ func do_attack() -> void:
 		if monster is Slime:
 			another_slime = true
 			break
-	await get_tree().create_timer(0.01).timeout
+	attacks.clear()
 	var attack := randi_range(0, 1 if !another_slime else 4)
 	match attack:
 		0:
 			var slime_bounce := preload("res://monsters/slime/attacks/slime_bounce/slime_bounce.tscn").instantiate()
 			get_parent().add_child(slime_bounce)
 			slime_bounce.position = Global.CENTER
-			await get_tree().create_timer(12.0).timeout
-			slime_bounce.queue_free()
+			attacks.append(slime_bounce)
 		1:
 			var slime_drip := preload("res://monsters/slime/attacks/slime_drip/slime_drip.tscn").instantiate()
 			get_parent().add_child(slime_drip)
 			slime_drip.position = Global.CENTER
-			await get_tree().create_timer(12.0).timeout
-			slime_drip.queue_free()
+			attacks.append(slime_drip)
 		_:
 			var slime_bounce := preload("res://monsters/slime/attacks/slime_bounce/slime_bounce.tscn").instantiate()
 			get_parent().add_child(slime_bounce)
@@ -108,7 +108,12 @@ func do_attack() -> void:
 			get_parent().add_child(slime_drip)
 			slime_drip.position = Global.CENTER
 			
-			await get_tree().create_timer(12.0).timeout
-			slime_bounce.queue_free()
-			slime_drip.queue_free()
-	attack_finished.emit()
+			attacks.append(slime_bounce)
+			attacks.append(slime_drip)
+	return 8.0
+
+func end_attack() -> void:
+	for attack: Node2D in attacks:
+		if attack != null:
+			attack.queue_free()
+	attacks.clear()
