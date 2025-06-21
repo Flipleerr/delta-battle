@@ -29,6 +29,8 @@ func get_files_recursive(p_directory: String) -> PackedStringArray:
 	for dir: String in DirAccess.get_directories_at(p_directory):
 		files.append_array(get_files_recursive(p_directory + "/" + dir))
 	for file: String in DirAccess.get_files_at(p_directory):
+		if OS.get_name() == "Web":
+			file = file.trim_suffix(".import")
 		if file.get_extension() != "import":
 			files.append(p_directory + "/" + file)
 	return files
