@@ -55,13 +55,14 @@ func get_idle_line() -> String:
 	return lines[randi_range(0, lines.size() - 1)]
 
 func delete_monster(p_monster: Monster) -> void:
-	monsters[monsters.find(p_monster)] = null
+	var monster_index := monsters.find(p_monster)
+	if monster_index != -1:
+		monsters[monster_index] = null
 	var monsters_dead := true
 	for monster: Monster in monsters:
 		if monster != null:
 			monsters_dead = false
 			break
-	print(monsters)
 	if monsters_dead:
 		await p_monster.exit_finished
 		change_to_scene("res://scenes/win_screen/win_screen.tscn")
