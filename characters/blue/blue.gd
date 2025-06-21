@@ -36,11 +36,9 @@ func prep_attack() -> void:
 	$AnimationPlayer.play("prep_attack")
 
 func do_attack(p_monster: Monster, p_damage: int) -> void:
+	super(p_monster, p_damage)
 	$AnimationPlayer.play("attack")
 	await $AnimationPlayer.animation_finished
-	if p_monster:
-		super(p_monster, p_damage)
-	await get_tree().create_timer(0.2).timeout
 	idle()
 
 func prep_act() -> void:
