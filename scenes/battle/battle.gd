@@ -7,6 +7,7 @@ func _ready() -> void:
 	
 	Sounds.play("snd_impact", 0.7)
 	Sounds.play("snd_weaponpull_fast", 0.8)
+	Sounds.set_music("battle", 0.7)
 
 func set_positions(parent: Node, nodes: Array, offset := Vector2.ZERO):
 	var size := nodes.size()

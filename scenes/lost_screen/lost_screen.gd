@@ -6,6 +6,7 @@ var slime_scene := preload("res://monsters/slime/slime.tscn")
 
 func _ready() -> void:
 	$Play.grab_focus()
+	Sounds.set_music("gameover_short", 0.8, false)
 
 func _on_play_focus_entered() -> void:
 	$Heart.position = $Play.position + Vector2(-16.0, 48.0 / 2.0 + 2.0)

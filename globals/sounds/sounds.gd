@@ -1,6 +1,9 @@
 extends Node
 
 var sounds: Dictionary[String, AudioStreamPlayer] = {}
+var music: Dictionary[String, AudioStreamPlayer] = {}
+
+var current_song := ""
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -12,6 +15,14 @@ func _ready() -> void:
 		audio_player.stream = load(file)
 		add_child(audio_player)
 		sounds.set(audio_player.name, audio_player)
+	
+	var music_files := get_files_recursive("res://globals/sounds/music")
+	for file: String in music_files:
+		var audio_player := AudioStreamPlayer.new()
+		audio_player.name = file.get_file().trim_suffix("." + file.get_extension())
+		audio_player.stream = load(file)
+		add_child(audio_player)
+		music.set(audio_player.name, audio_player)
 
 func get_files_recursive(p_directory: String) -> PackedStringArray:
 	var files := PackedStringArray()
@@ -29,3 +40,20 @@ func play(p_sound: String, p_volume := 1.0) -> void:
 	var audio_player := sounds[p_sound]
 	audio_player.volume_linear = p_volume
 	audio_player.play()
+
+func set_music(p_music: String, p_volume := 1.0, p_loop := true):
+	if !music.has(p_music):
+		printerr("Error in sounds.gd: Attempt to play song, \"" + p_music + "\", but no such song exists.")
+		return
+	if current_song != "":
+		var previous_song := music[current_song]
+		previous_song.stop()
+	var audio_player := music[p_music]
+	var stream := audio_player.stream
+	if stream is AudioStreamWAV:
+		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD if p_loop else AudioStreamWAV.LOOP_DISABLED
+	elif stream is AudioStreamOggVorbis:
+		stream.loop = p_loop
+	audio_player.volume_linear = p_volume
+	audio_player.play()
+	current_song = p_music
