@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://3f62x0n7gva3" path="res://ui/battle/char_menu/res/action_icons.png" id="5_ler53"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cp84r"]
+resource_local_to_scene = true
 bg_color = Color(0, 0, 0, 1)
 border_width_left = 2
 border_width_top = 2
@@ -20,10 +21,12 @@ border_color = Color(0.2, 0.12549, 0.2, 1)
 bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_1ln4u"]
+resource_local_to_scene = true
 line_spacing = 0.0
 font_size = 10
 
 [sub_resource type="LabelSettings" id="LabelSettings_rjcck"]
+resource_local_to_scene = true
 line_spacing = 0.0
 font_size = 10
 

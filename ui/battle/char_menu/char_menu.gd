@@ -30,7 +30,6 @@ var uses_magic := false:
 		$Actions/Magic.visible = true
 		$Actions/Act.visible = false
 
-var actions: Array[CharMenuButton] = []
 var activated := false:
 	set(p_activated):
 		activated = p_activated
@@ -52,20 +51,14 @@ var selected_item := 0:
 		selected_item = p_selected_item
 		actions[selected_item].selected = true
 
-var style_box: StyleBoxFlat
-
-func _ready() -> void:
-	actions = [
-		$Actions/Attack,
-		$Actions/Act,
-		$Actions/Item,
-		$Actions/Spare,
-		$Actions/Defend
-	]
-	style_box = $Stats.get_theme_stylebox("panel")
-	style_box = style_box.duplicate()
-	$Stats.add_theme_stylebox_override("panel", style_box)
-	$Actions.add_theme_stylebox_override("panel", style_box)
+@onready var style_box: StyleBoxFlat = $Stats.get_theme_stylebox("panel")
+@onready var actions: Array[CharMenuButton] = [
+	$Actions/Attack,
+	$Actions/Act,
+	$Actions/Item,
+	$Actions/Spare,
+	$Actions/Defend
+]
 
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if focused and p_event is InputEventKey and p_event.is_pressed():
