@@ -37,7 +37,12 @@ var context := CONTEXT.BATTLE:
 						character.defending = false
 				for char_menu: CharMenu in char_menus:
 					char_menu.deconfirm_action()
-				Global.items.erase(null)
+				var i := 0
+				while i < Global.items.size():
+					if Global.items[i] == null:
+						Global.items.remove_at(i)
+					else:
+						i += 1
 				$ItemSelect.reset_items()
 				for item: Item in Global.items:
 					$ItemSelect.add_item(item.name, item.short_description)
@@ -111,6 +116,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				if event.is_action("cancel"):
 					char_menus[current_char].deactivate()
 					current_char -= 1
+					if actions[current_char].what == Global.ITEM:
+						$ItemSelect.show_item(actions[current_char].specific, true)
 					char_menus[current_char].activate()
 					char_menus[current_char].deconfirm_action()
 					Global.characters[current_char].idle()
@@ -136,6 +143,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				return
 			CONTEXT.CHAR_SELECT:
 				if event.is_action("cancel"):
+					$ItemSelect.show_item(actions[current_char].specific, true)
 					context = CONTEXT.CHAR_MENU
 					return
 				Sounds.play("snd_select")
@@ -148,7 +156,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.MONSTER_SELECT
 					return
 				Sounds.play("snd_select")
-				actions[current_char].specific = $ActSelect.selected_item
+				actions[current_char].specific = $ActSelect.get_current_item()
 				Global.characters[current_char].prep_act()
 				next_char()
 				return
@@ -157,7 +165,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.CHAR_MENU
 					return
 				Sounds.play("snd_select")
-				actions[current_char].specific = $MagicSelect.selected_item
+				actions[current_char].specific = $MagicSelect.get_current_item()
 				Global.characters[current_char].prep_act()
 				next_char()
 				return
@@ -166,8 +174,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 					context = CONTEXT.CHAR_MENU
 					return
 				Sounds.play("snd_select")
-				actions[current_char].specific = $ItemSelect.selected_item
+				actions[current_char].specific = $ItemSelect.get_current_item()
 				context = CONTEXT.CHAR_SELECT
+				$ItemSelect.show_item($ItemSelect.get_current_item(), false)
 				return
 
 func queue_character_action() -> void:
@@ -182,8 +191,9 @@ func queue_character_action() -> void:
 			else:
 				context = CONTEXT.MAGIC_SELECT
 		Global.ITEM:
-			actions[current_char].what = Global.ITEM
-			context = CONTEXT.ITEM_SELECT
+			if $ItemSelect.has_items:
+				actions[current_char].what = Global.ITEM
+				context = CONTEXT.ITEM_SELECT
 		Global.SPARE:
 			actions[current_char].what = Global.SPARE
 			context = CONTEXT.MONSTER_SELECT
