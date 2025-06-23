@@ -27,13 +27,13 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.ACTION:
 				for character: Character in Global.characters:
 					if character.alive and !character.defending:
-						character.idle()
+						character.do_animation(Character.Animations.IDLE)
 			CONTEXT.BATTLE:
 				for character: Character in Global.characters:
 					if !character.alive:
 						character.heal(ceili(character.max_hp * 0.13))
 					if character.defending and character.alive:
-						character.idle()
+						character.do_animation(Character.Animations.IDLE)
 						character.defending = false
 				for char_menu: CharMenu in char_menus:
 					char_menu.deconfirm_action()
@@ -52,7 +52,7 @@ var context := CONTEXT.BATTLE:
 				get_parent().start_attack()
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].activate()
-				Global.characters[current_char].idle()
+				Global.characters[current_char].do_animation(Character.Animations.IDLE)
 			CONTEXT.MONSTER_SELECT:
 				$MonsterSelect.visible = true
 				$MonsterSelect.focused = true
@@ -120,7 +120,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 						$ItemSelect.show_item(actions[current_char].specific, true)
 					char_menus[current_char].activate()
 					char_menus[current_char].deconfirm_action()
-					Global.characters[current_char].idle()
+					Global.characters[current_char].do_animation(Character.Animations.IDLE)
 					return
 				Sounds.play("snd_select")
 				queue_character_action()
