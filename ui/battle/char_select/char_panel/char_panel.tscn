@@ -16,6 +16,8 @@ anchors_preset = 0
 offset_right = 640.0
 offset_bottom = 30.0
 script = ExtResource("1_ey76b")
+heart_path = NodePath("Heart")
+title_path = NodePath("Title")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 0

@@ -8,13 +8,15 @@ custom_minimum_size = Vector2(237, 30)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_yr8f7")
+heart_path = NodePath("Heart")
+title_path = NodePath("Title")
 
 [node name="Heart" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(21, 16)
 texture = ExtResource("2_t0k4i")
 
-[node name="Label" type="Label" parent="."]
+[node name="Title" type="Label" parent="."]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 0
 offset_left = 33.0

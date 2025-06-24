@@ -1,15 +1,9 @@
-extends Control
+extends SelectPanel
 class_name CharPanel
 
 var char_id := 0
 var current_hp := 1.0
 var max_hp := 1.0
-
-func set_select(p_selected: bool) -> void:
-	$Heart.visible = p_selected
-
-func set_title(p_title: String) -> void:
-	$Title.text = p_title
 
 func set_current_hp(p_current_hp: int) -> void:
 	current_hp = p_current_hp

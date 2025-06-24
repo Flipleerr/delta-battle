@@ -1,20 +1,8 @@
 extends Character
 
-var shake := 0.0
 var default_acts: Array[Act]= [
 	Act.new("Check")
 ]
-
-func shake_sprite(amount: float) -> void:
-	shake = amount
-
-func _process(delta: float) -> void:
-	if shake > 0.0:
-		shake = lerpf(shake, 0.0, 1.0 - pow(0.1, delta))
-		$BlueRobot.position = Vector2(randf_range(-shake, shake), randf_range(-shake, shake))
-		if shake <= 0.1:
-			shake = 0.0
-			$BlueRobot.position = Vector2.ZERO
 
 func get_acts() -> Array[Act]:
 	var acts := default_acts.duplicate()
@@ -29,25 +17,38 @@ func get_acts() -> Array[Act]:
 			slime_found = true
 	return acts
 
-func idle() -> void:
-	$AnimationPlayer.play("idle")
-
-func prep_attack() -> void:
-	$AnimationPlayer.play("prep_attack")
-
-func do_attack(p_monster: Monster, p_damage: int) -> void:
-	super(p_monster, p_damage)
-	$AnimationPlayer.play("attack")
-	await $AnimationPlayer.animation_finished
-	idle()
-
-func prep_act() -> void:
-	$AnimationPlayer.play("prep_act")
+func do_animation(p_animation: Animations) -> Signal:
+	match p_animation:
+		Animations.IDLE:
+			$AnimationPlayer.play("idle")
+		Animations.PREP_ATTACK:
+			$AnimationPlayer.play("prep_attack")
+		Animations.PREP_ACT:
+			$AnimationPlayer.play("prep_act")
+		Animations.PREP_ITEM:
+			$AnimationPlayer.play("prep_act")
+		Animations.PREP_SPARE:
+			$AnimationPlayer.play("prep_act")
+		Animations.ATTACK:
+			$AnimationPlayer.play("attack")
+		Animations.ACT:
+			$AnimationPlayer.play("act")
+		Animations.USE_ITEM:
+			$AnimationPlayer.play("act")
+		Animations.DEFEND:
+			$AnimationPlayer.play("defend")
+		Animations.SPARE:
+			$AnimationPlayer.play("act")
+		Animations.FAINT:
+			$AnimationPlayer.play("faint")
+		Animations.REVIVE:
+			$AnimationPlayer.play("RESET")
+			$AnimationPlayer.play("idle")
+	return $AnimationPlayer.animation_finished
 
 func do_act(p_monster: Monster, p_act: int) -> void:
 	var act := get_acts()[p_act]
-	$AnimationPlayer.play("act")
-	await get_tree().create_timer(0.01).timeout
+	await do_animation(Animations.ACT)
 	match act.title:
 		"Check":
 			Global.display_text.emit(p_monster.description, true)
@@ -73,42 +74,5 @@ func do_act(p_monster: Monster, p_act: int) -> void:
 			Global.display_text.emit("  * The slime jumps even higher.", true)
 			p_monster.increase_mercy(0.15)
 			await Global.text_finished
-	idle()
+	do_animation(Animations.IDLE)
 	act_finished.emit()
-
-func prep_item() -> void:
-	$AnimationPlayer.play("prep_act")
-
-func use_item(p_character: Character, p_item: int) -> void:
-	$AnimationPlayer.play("act")
-	await $AnimationPlayer.animation_finished
-	super(p_character, p_item)
-	idle()
-
-func prep_spare() -> void:
-	$AnimationPlayer.play("prep_act")
-
-func do_spare(p_monster: Monster) -> void:
-	$AnimationPlayer.play("act")
-	super(p_monster)
-	await $AnimationPlayer.animation_finished
-	idle()
-
-func defend() -> void:
-	$AnimationPlayer.play("defend")
-	defending = true
-
-func faint() -> void:
-	alive = false
-	$AnimationPlayer.play("faint")
-	await $AnimationPlayer.animation_finished
-	faint_finished.emit()
-
-func revive() -> void:
-	alive = true
-	$AnimationPlayer.play("RESET")
-	$AnimationPlayer.play("idle")
-
-func hurt(p_damage: int) -> void:
-	shake_sprite(4.0)
-	super(p_damage)

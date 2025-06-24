@@ -21,8 +21,12 @@ bg_color = Color(1, 1, 0, 1)
 custom_minimum_size = Vector2(640, 30)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 30.0
+offset_right = 640.0
+offset_bottom = 30.0
 script = ExtResource("1_fyfih")
+heart_path = NodePath("Heart")
+title_path = NodePath("Title")
+metadata/_custom_type_script = "uid://c647nxwp6djnn"
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 0
