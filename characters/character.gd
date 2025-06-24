@@ -119,11 +119,11 @@ func use_item(p_character: Character, p_item: int) -> void:
 			Global.display_text.emit("  * " + title + " used the " + item.name + "!", true)
 			Global.delete_item(p_item)
 		Item.TYPE.WEAPON:
-			p_character.equipped_weapon == name
+			p_character.equipped_weapon = name
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 		Item.TYPE.ARMOR:
-			p_character.equipped_weapon == name
+			p_character.equipped_weapon = name
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 	await Global.text_finished
@@ -137,11 +137,11 @@ func unequip_item(p_character, p_item) -> void:
 	match item.type:
 		item.TYPE.WEAPON:
 			items.append(equipped_weapon)
-			p_character.equipped_weapon == " "
+			p_character.equipped_weapon = " "
 			Global.display_text.emit("  * " + title + " unequipped the " + item.name + ".", true)
 		item.TYPE.ARMOR:
 			items.append(equipped_armor)
-			p_character.equipped_armor == " "
+			p_character.equipped_armor = " "
 			Global.display_text.emit("  * " + title + " unequipped the " + item.name + ".", true)
 		await Global.text_finished
 
