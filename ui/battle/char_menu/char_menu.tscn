@@ -34,6 +34,7 @@ font_size = 10
 bg_color = Color(0.501961, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2bc2"]
+resource_local_to_scene = true
 bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ln4u"]
