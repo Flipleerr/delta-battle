@@ -9,21 +9,18 @@ class Action:
 	var to: int
 	var specific: int
 
+@onready var menus: Dictionary[CONTEXT, SelectMenu] = {
+	CONTEXT.MONSTER_SELECT: $MonsterSelect, CONTEXT.CHAR_SELECT: $CharSelect, CONTEXT.ITEM_SELECT: $ItemSelect,
+	CONTEXT.ACT_SELECT: $ActSelect, CONTEXT.MAGIC_SELECT: $MagicSelect
+}
+
 var context := CONTEXT.BATTLE:
 	set(p_context):
+		if CONTEXT.MONSTER_SELECT <= context and context <= CONTEXT.MAGIC_SELECT:
+			menus[context].focused = false
 		match context:
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].focused = false
-			CONTEXT.MONSTER_SELECT:
-				$MonsterSelect.focused = false
-			CONTEXT.CHAR_SELECT:
-				$CharSelect.focused = false
-			CONTEXT.ITEM_SELECT:
-				$ItemSelect.focused = false
-			CONTEXT.ACT_SELECT:
-				$ActSelect.focused = false
-			CONTEXT.MAGIC_SELECT:
-				$MagicSelect.focused = false
 			CONTEXT.ACTION:
 				for character: Character in Global.characters:
 					if character.alive and !character.defending:
@@ -43,7 +40,7 @@ var context := CONTEXT.BATTLE:
 						Global.items.remove_at(i)
 					else:
 						i += 1
-				$ItemSelect.reset_items()
+				$ItemSelect.clear_items()
 				for item: Item in Global.items:
 					$ItemSelect.add_item(item.name, item.short_description)
 		context = p_context
@@ -53,32 +50,14 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.CHAR_MENU:
 				char_menus[current_char].activate()
 				Global.characters[current_char].do_animation(Character.Animations.IDLE)
-			CONTEXT.MONSTER_SELECT:
-				$MonsterSelect.visible = true
-				$MonsterSelect.focused = true
-				$MonsterSelect.selected_item = 0
-			CONTEXT.CHAR_SELECT:
-				$CharSelect.visible = true
-				$CharSelect.focused = true
-				$CharSelect.selected_item = 0
-			CONTEXT.ITEM_SELECT:
-				$ItemSelect.visible = true
-				$ItemSelect.focused = true
-				$ItemSelect.selected_coords = Vector2.ZERO
 			CONTEXT.ACT_SELECT:
-				$ActSelect.reset_items()
+				$ActSelect.clear_items()
 				for act: Act in Global.characters[current_char].get_acts():
 					$ActSelect.add_item(act.title)
-				$ActSelect.visible = true
-				$ActSelect.focused = true
-				$ActSelect.selected_coords = Vector2.ZERO
 			CONTEXT.MAGIC_SELECT:
-				$MagicSelect.reset_items()
+				$MagicSelect.clear_items()
 				for spell: Spell in Global.characters[current_char].get_spells():
 					$MagicSelect.add_item(spell.title, spell.description, spell.tp_cost)
-				$MagicSelect.visible = true
-				$MagicSelect.focused = true
-				$MagicSelect.selected_coords = Vector2.ZERO
 			CONTEXT.ACTION:
 				$TextBox.hide_text()
 				for char_menu: CharMenu in char_menus:
@@ -86,10 +65,13 @@ var context := CONTEXT.BATTLE:
 						char_menu.deconfirm_action()
 				current_char = -1
 				do_next_action()
+		if CONTEXT.MONSTER_SELECT <= context and context <= CONTEXT.MAGIC_SELECT:
+			menus[context].visible = true
+			menus[context].selected_coords = Vector2.ZERO
+			menus[context].focused = true
 
 var char_menus: Array[CharMenu] = []
 var current_char := 0
-
 var actions: Array[Action] = []
 
 func _ready() -> void:
@@ -104,33 +86,25 @@ func _ready() -> void:
 	context = CONTEXT.CHAR_MENU
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if Global.displaying_text and $TextBox.require_input:
+	if (Global.displaying_text and $TextBox.require_input) or context == CONTEXT.BATTLE:
 		return
 	if (event.is_action("confirm") or event.is_action("cancel")) and event.is_pressed():
+		if event.is_action("cancel"):
+			undo_input()
+			return
+		
+		Sounds.play("snd_select")
+		if CONTEXT.MONSTER_SELECT <= context:
+			if context <= CONTEXT.CHAR_SELECT:
+				actions[current_char].to = menus[context].get_current_id()
+			elif context <= CONTEXT.ITEM_SELECT:
+				actions[current_char].specific = menus[context].get_current_id()
+		
 		match context:
-			CONTEXT.BATTLE:
-				return
 			CONTEXT.CHAR_MENU:
-				if current_char == 0 and event.is_action("cancel"):
-					return
-				if event.is_action("cancel"):
-					char_menus[current_char].deactivate()
-					current_char -= 1
-					if actions[current_char].what == Global.ITEM:
-						$ItemSelect.show_item(actions[current_char].specific, true)
-					char_menus[current_char].activate()
-					char_menus[current_char].deconfirm_action()
-					Global.characters[current_char].do_animation(Character.Animations.IDLE)
-					return
-				Sounds.play("snd_select")
 				queue_character_action()
 				return
 			CONTEXT.MONSTER_SELECT:
-				if event.is_action("cancel"):
-					context = CONTEXT.CHAR_MENU
-					return
-				Sounds.play("snd_select")
-				actions[current_char].to = $MonsterSelect.get_monster_id()
 				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
 					context = CONTEXT.ACT_SELECT
 					return
@@ -142,42 +116,42 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				next_char()
 				return
 			CONTEXT.CHAR_SELECT:
-				if event.is_action("cancel"):
-					$ItemSelect.show_item(actions[current_char].specific, true)
-					context = CONTEXT.CHAR_MENU
-					return
-				Sounds.play("snd_select")
-				actions[current_char].to = $CharSelect.selected_item
 				Global.characters[current_char].prep_item()
 				next_char()
 				return
 			CONTEXT.ACT_SELECT:
-				if event.is_action("cancel"):
-					context = CONTEXT.MONSTER_SELECT
-					return
-				Sounds.play("snd_select")
-				actions[current_char].specific = $ActSelect.get_current_item()
 				Global.characters[current_char].prep_act()
 				next_char()
 				return
 			CONTEXT.MAGIC_SELECT:
-				if event.is_action("cancel"):
-					context = CONTEXT.CHAR_MENU
-					return
-				Sounds.play("snd_select")
-				actions[current_char].specific = $MagicSelect.get_current_item()
 				Global.characters[current_char].prep_act()
 				next_char()
 				return
 			CONTEXT.ITEM_SELECT:
-				if event.is_action("cancel"):
-					context = CONTEXT.CHAR_MENU
-					return
-				Sounds.play("snd_select")
-				actions[current_char].specific = $ItemSelect.get_current_item()
 				context = CONTEXT.CHAR_SELECT
-				$ItemSelect.show_item($ItemSelect.get_current_item(), false)
+				$ItemSelect.show_item($ItemSelect.get_current_id(), false)
 				return
+
+func undo_input() -> void:
+	match context:
+		CONTEXT.CHAR_MENU:
+			if current_char == 0:
+				return
+			char_menus[current_char].deactivate()
+			current_char -= 1
+			if actions[current_char].what == Global.ITEM:
+				$ItemSelect.show_item(actions[current_char].specific, true)
+			char_menus[current_char].activate()
+			char_menus[current_char].deconfirm_action()
+			Global.characters[current_char].do_animation(Character.Animations.IDLE)
+			return
+		CONTEXT.CHAR_SELECT:
+			$ItemSelect.show_item(actions[current_char].specific, true)
+		CONTEXT.ACT_SELECT:
+			context = CONTEXT.MONSTER_SELECT
+			return
+	if CONTEXT.MONSTER_SELECT <= context and context <= CONTEXT.ITEM_SELECT:
+		context = CONTEXT.CHAR_MENU
 
 func queue_character_action() -> void:
 	match char_menus[current_char].selected_item:

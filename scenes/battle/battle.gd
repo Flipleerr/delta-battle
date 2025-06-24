@@ -54,6 +54,8 @@ func start_attack() -> void:
 	for monster: Monster in Global.monsters:
 		if monster != null:
 			alive_monsters.append(monster)
+	if alive_monsters.is_empty():
+		return
 	var monster: Monster = alive_monsters.pick_random()
 	turn_timer = monster.start_attack()
 	in_attack = true

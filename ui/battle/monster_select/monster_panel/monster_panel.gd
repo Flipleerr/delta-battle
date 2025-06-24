@@ -1,13 +1,7 @@
-extends Control
+extends SelectPanel
 class_name MonsterPanel
 
 var monster_id := 0
-
-func set_select(p_selected: bool) -> void:
-	$Heart.visible = p_selected
-
-func set_title(p_title: String) -> void:
-	$Title.text = p_title
 
 func set_current_hp(p_current_hp: int) -> void:
 	$HPBar.value = p_current_hp
