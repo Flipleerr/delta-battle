@@ -13,10 +13,14 @@ func _ready() -> void:
 
 func set_select(p_selected: bool) -> void:
 	if !heart:
-		return
+		if !heart_path:
+			return
+		heart = get_node_or_null(heart_path)
 	heart.visible = p_selected
 
 func set_title(p_title: String) -> void:
 	if !title:
+		if !title_path:
+			return
 		title = get_node_or_null(title_path)
 	title.text = p_title
