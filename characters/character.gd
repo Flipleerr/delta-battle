@@ -12,7 +12,10 @@ enum Animations {
 @export var max_hp := 1
 @export var strength := 0:
 	get():
-		return strength + equipped_weapon.amount
+		var weapon_strength := 0
+		if equipped_weapon:
+			weapon_strength = equipped_weapon.amount
+		return strength + weapon_strength
 @export var defense := 0:
 	get():
 		var total_armor_defense := 0
