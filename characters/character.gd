@@ -6,13 +6,19 @@ enum Animations {
 }
 
 @export var title := ""
-@export var equipped_weapon := " "
-@export var equipped_armor := " "
+@export var equipped_weapon: Item
+@export var equipped_armor: Item
 @export var current_hp := 100
 @export var max_hp := 1
-@export var strength := 0 + weapon_strength + armor_strength
-@export var defense := 0 + armor_defence
-@export var magic := 0 + armor_magic_strength
+@export var strength := 0:
+	get():
+		return strength + equipped_weapon.amount
+@export var defense := 0:
+	get():
+		return defense + equipped_armor.amount
+@export var magic := 0:
+	get():
+		return magic + equipped_armor.amount
 @export var uses_magic := false
 @export_color_no_alpha var main_color := Color.WHITE
 @export_color_no_alpha var icon_color := Color.GRAY
@@ -105,11 +111,11 @@ func use_item(p_character: Character, p_item: int) -> void:
 			Global.display_text.emit("  * " + title + " used the " + item.name + "!", true)
 			Global.delete_item(p_item)
 		Item.TYPE.WEAPON:
-			p_character.equipped_weapon = name
+			p_character.equipped_weapon = item
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 		Item.TYPE.ARMOR:
-			p_character.equipped_weapon = name
+			p_character.equipped_weapon = item
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 	await Global.text_finished
