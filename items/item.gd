@@ -2,7 +2,7 @@ extends Resource
 class_name Item
 
 enum TYPE {
-	NONE, HEAL
+	NONE, HEAL, WEAPON, ARMOR
 }
 
 @export var name := "Item"

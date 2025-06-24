@@ -6,10 +6,13 @@ enum Animations {
 }
 
 @export var title := ""
+@export var equipped_weapon := " "
+@export var equipped_armor := " "
 @export var current_hp := 100
 @export var max_hp := 1
-@export var strength := 0
-@export var defense := 0
+@export var strength := 0 + weapon_strength + armor_strength
+@export var defense := 0 + armor_defence
+@export var magic := 0 + armor_magic_strength
 @export var uses_magic := false
 @export_color_no_alpha var main_color := Color.WHITE
 @export_color_no_alpha var icon_color := Color.GRAY
@@ -101,10 +104,18 @@ func use_item(p_character: Character, p_item: int) -> void:
 			p_character.heal(item.amount)
 			Global.display_text.emit("  * " + title + " used the " + item.name + "!", true)
 			Global.delete_item(p_item)
+		Item.TYPE.WEAPON:
+			p_character.equipped_weapon = name
+			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
+			Global.delete_item(p_item)
+		Item.TYPE.ARMOR:
+			p_character.equipped_weapon = name
+			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
+			Global.delete_item(p_item)
 	await Global.text_finished
 	do_animation(Animations.IDLE)
 	item_used.emit()
-
+  
 func do_spare(p_monster: Monster) -> void:
 	do_animation(Animations.SPARE)
 	if p_monster.mercy_percent >= 1.0:
