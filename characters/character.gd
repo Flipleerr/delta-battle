@@ -7,7 +7,7 @@ enum Animations {
 
 @export var title := ""
 @export var equipped_weapon: Item
-@export var equipped_armor: Item
+@export var armors: Array[Item]
 @export var current_hp := 100
 @export var max_hp := 1
 @export var strength := 0:
@@ -15,10 +15,16 @@ enum Animations {
 		return strength + equipped_weapon.amount
 @export var defense := 0:
 	get():
-		return defense + equipped_armor.amount
+		var total_armor_defense := 0
+		for armor: Item in armors:
+			total_armor_defense += armor.amount
+		return defense + total_armor_defense
 @export var magic := 0:
 	get():
-		return magic + equipped_armor.amount
+		var total_armor_magic := 0
+		for armor: Item in armors:
+			total_armor_magic += armor.amount
+		return magic + total_armor_magic
 @export var uses_magic := false
 @export_color_no_alpha var main_color := Color.WHITE
 @export_color_no_alpha var icon_color := Color.GRAY
@@ -46,6 +52,11 @@ func _ready() -> void:
 	sprite.material = mat
 	await get_tree().create_timer(randf_range(0.0, 0.6)).timeout
 	do_animation(Animations.IDLE)
+
+func swap_armor(p_id: int, p_armor: Item) -> void:
+	if armors.size() < 2:
+		armors.resize(2)
+	armors[p_id] = p_armor
 
 func shake_sprite(p_amount: float) -> void:
 	shake = p_amount
@@ -115,7 +126,7 @@ func use_item(p_character: Character, p_item: int) -> void:
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 		Item.TYPE.ARMOR:
-			p_character.equipped_weapon = item
+			p_character.armors[0] = item
 			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
 			Global.delete_item(p_item)
 	await Global.text_finished
