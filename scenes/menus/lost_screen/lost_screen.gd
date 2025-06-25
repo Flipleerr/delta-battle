@@ -1,8 +1,6 @@
 extends Node2D
 
 var dark_candy := preload("res://items/dark_candy.tres")
-var blue_scene := preload("res://characters/blue/blue.tscn")
-var slime_scene := preload("res://monsters/slime/slime.tscn")
 
 func _ready() -> void:
 	$Play.grab_focus()
@@ -18,12 +16,10 @@ func _on_quit_focus_entered() -> void:
 
 func _on_play_pressed() -> void:
 	Sounds.play("snd_select")
-	Global.characters = [blue_scene.instantiate(), blue_scene.instantiate(), blue_scene.instantiate()]
-	Global.monsters = [slime_scene.instantiate(), slime_scene.instantiate()]
 	Global.items = [
 		dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy, dark_candy
 	]
-	Global.change_to_scene("res://scenes/battle/battle.tscn")
+	Global.change_to_scene("res://scenes/menus/customize_battle/customize_battle.tscn", false)
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

@@ -44,9 +44,13 @@ func play(p_sound: String, p_volume := 1.0) -> void:
 	audio_player.play()
 
 func set_music(p_music: String, p_volume := 1.0, p_loop := true):
+	if p_music == current_song:
+		return
+	
 	if !music.has(p_music):
 		printerr("Error in sounds.gd: Attempt to play song, \"" + p_music + "\", but no such song exists.")
 		return
+	
 	if current_song != "":
 		var previous_song := music[current_song]
 		previous_song.stop()

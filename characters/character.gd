@@ -6,28 +6,34 @@ enum Animations {
 }
 
 @export var title := ""
-@export var equipped_weapon: Item
-@export var armors: Array[Item]
+@export var weapon: Equippable
+@export var armors: Array[Equippable]
 @export var current_hp := 100
 @export var max_hp := 1
 @export var strength := 0:
 	get():
-		var weapon_strength := 0
-		if equipped_weapon:
-			weapon_strength = equipped_weapon.amount
-		return strength + weapon_strength
+		var equipped_strength := 0
+		if weapon:
+			equipped_strength = weapon.attack
+		for armor: Equippable in armors:
+			equipped_strength += armor.attack
+		return strength + equipped_strength
 @export var defense := 0:
 	get():
-		var total_armor_defense := 0
-		for armor: Item in armors:
-			total_armor_defense += armor.amount
-		return defense + total_armor_defense
+		var equipped_defense := 0
+		if weapon:
+			equipped_defense = weapon.defense
+		for armor: Equippable in armors:
+			equipped_defense += armor.defense
+		return defense + equipped_defense
 @export var magic := 0:
 	get():
-		var total_armor_magic := 0
-		for armor: Item in armors:
-			total_armor_magic += armor.amount
-		return magic + total_armor_magic
+		var equipped_magic := 0
+		if weapon:
+			equipped_magic = weapon.magic
+		for armor: Equippable in armors:
+			equipped_magic += armor.magic
+		return magic + equipped_magic
 @export var uses_magic := false
 @export_color_no_alpha var main_color := Color.WHITE
 @export_color_no_alpha var icon_color := Color.GRAY
@@ -56,7 +62,7 @@ func _ready() -> void:
 	await get_tree().create_timer(randf_range(0.0, 0.6)).timeout
 	do_animation(Animations.IDLE)
 
-func swap_armor(p_id: int, p_armor: Item) -> void:
+func swap_armor(p_id: int, p_armor: Equippable) -> void:
 	if armors.size() < 2:
 		armors.resize(2)
 	armors[p_id] = p_armor
@@ -124,18 +130,10 @@ func use_item(p_character: Character, p_item: int) -> void:
 			p_character.heal(item.amount)
 			Global.display_text.emit("  * " + title + " used the " + item.name + "!", true)
 			Global.delete_item(p_item)
-		Item.TYPE.WEAPON:
-			p_character.equipped_weapon = item
-			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
-			Global.delete_item(p_item)
-		Item.TYPE.ARMOR:
-			p_character.armors[0] = item
-			Global.display_text.emit("  * " + title + " equipped the " + item.name + "!", true)
-			Global.delete_item(p_item)
 	await Global.text_finished
 	do_animation(Animations.IDLE)
 	item_used.emit()
-  
+
 func do_spare(p_monster: Monster) -> void:
 	do_animation(Animations.SPARE)
 	if p_monster.mercy_percent >= 1.0:

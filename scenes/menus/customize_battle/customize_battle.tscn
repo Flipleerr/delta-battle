@@ -1,0 +1,251 @@
+[gd_scene load_steps=4 format=3 uid="uid://chubr6fl27jfm"]
+
+[ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="1_21myx"]
+[ext_resource type="Script" uid="uid://uo1143gkpip7" path="res://scenes/menus/customize_battle/customize_battle.gd" id="1_myn3y"]
+[ext_resource type="PackedScene" uid="uid://b268fklbbaj1q" path="res://ui/custom_spin_box/custom_spin_box.tscn" id="2_p2nvh"]
+
+[node name="CustomizeBattle" type="Node2D"]
+script = ExtResource("1_myn3y")
+
+[node name="Main" type="Node2D" parent="."]
+
+[node name="Title" type="Label" parent="Main"]
+custom_minimum_size = Vector2(400, 0)
+offset_left = 120.0
+offset_top = 34.0
+offset_right = 520.0
+offset_bottom = 82.0
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "CUSTOMIZE BATTLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Start" type="Button" parent="Main"]
+custom_minimum_size = Vector2(400, 0)
+offset_left = 120.0
+offset_top = 386.0
+offset_right = 520.0
+offset_bottom = 434.0
+focus_neighbor_top = NodePath("../VBox/Equipment")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "BEGIN"
+
+[node name="VBox" type="VBoxContainer" parent="Main"]
+custom_minimum_size = Vector2(640, 480)
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Characters" type="Button" parent="Main/VBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Enemies")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "CHARACTERS"
+
+[node name="Enemies" type="Button" parent="Main/VBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+focus_neighbor_top = NodePath("../Characters")
+focus_neighbor_bottom = NodePath("../Equipment")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "ENEMIES"
+
+[node name="Equipment" type="Button" parent="Main/VBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+focus_neighbor_top = NodePath("../Enemies")
+focus_neighbor_bottom = NodePath("../../Start")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "EQUIPMENT"
+
+[node name="Characters" type="Node2D" parent="."]
+visible = false
+
+[node name="Title" type="Label" parent="Characters"]
+custom_minimum_size = Vector2(640, 0)
+offset_top = 34.0
+offset_right = 640.0
+offset_bottom = 82.0
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "CUSTOMIZE CHARACTERS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Characters"]
+custom_minimum_size = Vector2(640, 480)
+offset_right = 640.0
+offset_bottom = 480.0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Char1" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Char2")
+options = ["NONE", "BLUE"]
+
+[node name="Char2" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Char1")
+focus_neighbor_bottom = NodePath("../Char3")
+options = ["NONE", "BLUE"]
+
+[node name="Char3" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Char2")
+focus_neighbor_bottom = NodePath("../../Back")
+options = ["NONE", "BLUE"]
+
+[node name="Back" type="Button" parent="Characters"]
+custom_minimum_size = Vector2(400, 0)
+offset_left = 120.0
+offset_top = 386.0
+offset_right = 520.0
+offset_bottom = 434.0
+focus_neighbor_top = NodePath("../VBox/Char3")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+
+[node name="Enemies" type="Node2D" parent="."]
+visible = false
+
+[node name="Title" type="Label" parent="Enemies"]
+custom_minimum_size = Vector2(640, 0)
+offset_top = 34.0
+offset_right = 640.0
+offset_bottom = 82.0
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "CUSTOMIZE ENEMIES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Enemies"]
+custom_minimum_size = Vector2(640, 480)
+offset_right = 640.0
+offset_bottom = 480.0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Enemy1" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Enemy2")
+options = ["NONE", "SLIME"]
+
+[node name="Enemy2" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Enemy1")
+focus_neighbor_bottom = NodePath("../Enemy3")
+options = ["NONE", "SLIME"]
+
+[node name="Enemy3" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Enemy2")
+focus_neighbor_bottom = NodePath("../../Back")
+options = ["NONE", "SLIME"]
+
+[node name="Back" type="Button" parent="Enemies"]
+custom_minimum_size = Vector2(400, 0)
+offset_left = 120.0
+offset_top = 386.0
+offset_right = 520.0
+offset_bottom = 434.0
+focus_neighbor_top = NodePath("../VBox/Enemy3")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+
+[node name="Equipment" type="Node2D" parent="."]
+visible = false
+
+[node name="Title" type="Label" parent="Equipment"]
+custom_minimum_size = Vector2(640, 0)
+offset_top = 34.0
+offset_right = 640.0
+offset_bottom = 82.0
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "CUSTOMIZE EQUIPMENT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Equipment"]
+custom_minimum_size = Vector2(640, 480)
+offset_top = -5.0
+offset_right = 640.0
+offset_bottom = 475.0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="WeaponLabel" type="Label" parent="Equipment/VBox"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "WEAPON"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Weapon" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Armor1")
+options = ["NONE", "WOOD BLADE", "SPOOKY SWORD"]
+
+[node name="ArmorLabel" type="Label" parent="Equipment/VBox"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+focus_neighbor_top = NodePath("../VBox/Characters")
+focus_neighbor_bottom = NodePath("../VBox/Characters")
+theme_override_font_sizes/font_size = 48
+text = "ARMOR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Armor1" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Weapon")
+focus_neighbor_bottom = NodePath("../Armor2")
+options = ["NONE", "AMBER CARD", "IRON SHACKLE", "WHITE RIBBON"]
+
+[node name="Armor2" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Armor1")
+focus_neighbor_bottom = NodePath("../../Back")
+options = ["NONE", "AMBER CARD", "IRON SHACKLE", "WHITE RIBBON"]
+
+[node name="Back" type="Button" parent="Equipment"]
+custom_minimum_size = Vector2(400, 0)
+offset_left = 120.0
+offset_top = 386.0
+offset_right = 520.0
+offset_bottom = 434.0
+focus_neighbor_top = NodePath("../VBox/Armor2")
+mouse_filter = 2
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+
+[node name="Heart" type="Sprite2D" parent="."]
+position = Vector2(93, 166)
+scale = Vector2(2, 2)
+texture = ExtResource("1_21myx")
+
+[connection signal="pressed" from="Main/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Main/VBox/Characters" to="." method="_on_characters_pressed"]
+[connection signal="pressed" from="Main/VBox/Enemies" to="." method="_on_enemies_pressed"]
+[connection signal="pressed" from="Main/VBox/Equipment" to="." method="_on_equipment_pressed"]
+[connection signal="pressed" from="Characters/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Enemies/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Equipment/Back" to="." method="_on_back_pressed"]

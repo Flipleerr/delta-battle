@@ -91,5 +91,5 @@ func hurt(p_damage: int) -> void:
 	character.hurt(p_damage)
 	if alive_characters.size() == 1 and !character.alive:
 		await character.faint_finished
-		Global.change_to_scene("res://scenes/lost_screen/lost_screen.tscn")
+		Global.change_to_scene("res://scenes/menus/lost_screen/lost_screen.tscn")
 		Sounds.play("snd_break2", 0.6)

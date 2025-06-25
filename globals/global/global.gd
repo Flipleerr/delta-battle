@@ -65,17 +65,20 @@ func delete_monster(p_monster: Monster) -> void:
 			break
 	if monsters_dead:
 		await p_monster.exit_finished
-		change_to_scene("res://scenes/win_screen/win_screen.tscn")
+		change_to_scene("res://scenes/menus/win_screen/win_screen.tscn")
 	monster_killed.emit()
 
 func delete_item(p_item: int) -> void:
 	items[p_item] = null
 
-func change_to_scene(scene_path: String) -> void:
-	PostProcessing.fade_out()
-	get_tree().paused = true
-	await PostProcessing.fade_finished
-	get_tree().change_scene_to_file(scene_path)
-	PostProcessing.fade_in()
-	await PostProcessing.fade_finished
-	get_tree().paused = false
+func change_to_scene(scene_path: String, fade := true) -> void:
+	if fade:
+		PostProcessing.fade_out()
+		get_tree().paused = true
+		await PostProcessing.fade_finished
+		get_tree().change_scene_to_file(scene_path)
+		PostProcessing.fade_in()
+		await PostProcessing.fade_finished
+		get_tree().paused = false
+	else:
+		get_tree().change_scene_to_file(scene_path)
