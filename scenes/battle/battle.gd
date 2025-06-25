@@ -7,6 +7,7 @@ func _ready() -> void:
 	set_positions($Characters, Global.characters, Vector2(108.0, 0.0))
 	set_positions($Monsters, Global.monsters, Vector2(640.0 - 108.0, 0.0))
 	Global.display_text.emit(Global.get_opening_line(), false)
+	Global.monster_killed.connect(monster_killed)
 	
 	Sounds.play("snd_impact", 0.7)
 	Sounds.play("snd_weaponpull_fast", 0.8)
@@ -60,7 +61,7 @@ func start_attack() -> void:
 	turn_timer = monster.start_attack()
 	in_attack = true
 
-func end_attack() -> void:
+func end_attack(p_continue_battle := true) -> void:
 	for monster: Monster in Global.monsters:
 		if monster != null:
 			monster.end_attack()
@@ -71,11 +72,12 @@ func end_attack() -> void:
 	tween.finished.connect(play_heart_animation)
 	$SoulCage.contract()
 	await $SoulCage.finished_animation
-	$BottomPanel.current_char = -1
-	for char_menu: CharMenu in $BottomPanel.char_menus:
-		char_menu.selected_item = 0
-	$BottomPanel.next_char()
-	Global.display_text.emit(Global.get_idle_line(), false)
+	if p_continue_battle:
+		$BottomPanel.current_char = -1
+		for char_menu: CharMenu in $BottomPanel.char_menus:
+			char_menu.selected_item = 0
+		$BottomPanel.next_char()
+		Global.display_text.emit(Global.get_idle_line(), false)
 
 func play_heart_animation() -> void:
 	$Soul.visible = false
@@ -93,3 +95,18 @@ func hurt(p_damage: int) -> void:
 		await character.faint_finished
 		Global.change_to_scene("res://scenes/menus/lost_screen/lost_screen.tscn")
 		Sounds.play("snd_break2", 0.6)
+
+func monster_killed() -> void:
+	var monsters_dead := true
+	for monster: Monster in Global.monsters:
+		if monster != null:
+			monsters_dead = false
+			break
+	if monsters_dead:
+		$BottomPanel.continue_battle = false
+		$BottomPanel/AttackTiming.focused = false
+		for character: Character in Global.characters:
+			character.do_animation(Character.Animations.IDLE)
+		Global.display_text.emit("  * You won!\n[color=#000]----[/color]Got 0 EXP and 10D$.", true)
+		await Global.text_finished
+		Global.change_to_scene("res://scenes/menus/win_screen/win_screen.tscn")

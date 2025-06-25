@@ -73,6 +73,7 @@ var context := CONTEXT.BATTLE:
 var char_menus: Array[CharMenu] = []
 var current_char := 0
 var actions: Array[Action] = []
+var continue_battle := true
 
 func _ready() -> void:
 	for character: Character in Global.characters:
@@ -86,7 +87,7 @@ func _ready() -> void:
 	context = CONTEXT.CHAR_MENU
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if (Global.displaying_text and $TextBox.require_input) or context == CONTEXT.BATTLE:
+	if (Global.displaying_text and $TextBox.require_input) or context == CONTEXT.BATTLE or !continue_battle:
 		return
 	if (event.is_action("confirm") or event.is_action("cancel")) and event.is_pressed():
 		if event.is_action("cancel"):
@@ -202,6 +203,8 @@ func next_char() -> void:
 		context = CONTEXT.CHAR_MENU
 
 func do_next_action() -> void:
+	if !continue_battle:
+		return
 	if current_char == -1:
 		var fighting_characters := PackedInt32Array()
 		for i: int in actions.size():

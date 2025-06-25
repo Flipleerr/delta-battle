@@ -58,14 +58,6 @@ func delete_monster(p_monster: Monster) -> void:
 	var monster_index := monsters.find(p_monster)
 	if monster_index != -1:
 		monsters[monster_index] = null
-	var monsters_dead := true
-	for monster: Monster in monsters:
-		if monster != null:
-			monsters_dead = false
-			break
-	if monsters_dead:
-		await p_monster.exit_finished
-		change_to_scene("res://scenes/menus/win_screen/win_screen.tscn")
 	monster_killed.emit()
 
 func delete_item(p_item: int) -> void:
