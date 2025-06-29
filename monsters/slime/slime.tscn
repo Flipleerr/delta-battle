@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://dtuxxajnf41ym"]
+[gd_scene load_steps=14 format=3 uid="uid://dtuxxajnf41ym"]
 
 [ext_resource type="Script" uid="uid://bgih30aac76ts" path="res://monsters/slime/slime.gd" id="1_r1nth"]
 [ext_resource type="Shader" uid="uid://dyrt7gdlbx6eb" path="res://monsters/generic_monster.gdshader" id="2_7jcwp"]
+[ext_resource type="Script" uid="uid://bwvvm6kvpsqi1" path="res://characters/acts/act.gd" id="2_la5cp"]
 [ext_resource type="Texture2D" uid="uid://c78pfs4rteejq" path="res://monsters/slime/res/green_slime.png" id="2_r1nth"]
+[ext_resource type="Resource" uid="uid://b0xue5lmmsgi6" path="res://monsters/slime/acts/dribble.tres" id="3_vwcsi"]
+[ext_resource type="Resource" uid="uid://co7hijqhju0pe" path="res://monsters/slime/acts/jump.tres" id="4_24fbq"]
+[ext_resource type="Resource" uid="uid://b246jycqrpiow" path="res://monsters/slime/acts/scare.tres" id="5_h1ox4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kuoc1"]
 shader = ExtResource("2_7jcwp")
@@ -136,6 +140,7 @@ _data = {
 script = ExtResource("1_r1nth")
 title = "Slime"
 description = "  * Slime - A bouncy little menace that [color=#000]----[/color]only cares about how high it can [color=#000]----[/color]jump."
+acts = Array[ExtResource("2_la5cp")]([ExtResource("3_vwcsi"), ExtResource("4_24fbq"), ExtResource("5_h1ox4")])
 current_hp = 130
 max_hp = 130
 strength = 7

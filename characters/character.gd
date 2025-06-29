@@ -81,9 +81,15 @@ func _process(p_delta: float) -> void:
 			shake = 0.0
 			sprite.position = Vector2.ZERO
 
-## Override function
-func get_acts() -> Array[Act]:
-	return [Act.new("Check")]
+func get_acts(p_monster: Monster) -> Array[Act]:
+	var acts: Array[Act] = []
+	
+	var check := preload("res://characters/acts/check/check.tres")
+	acts.append(check)
+	var monster_acts := p_monster.get_acts()
+	acts.append_array(monster_acts)
+	
+	return acts
 
 ## Override function
 func get_spells() -> Array[Spell]:
@@ -186,12 +192,9 @@ func heal(p_amount: int) -> void:
 		create_text(str(p_amount), icon_color)
 	health_changed.emit(current_hp)
 
-func do_act(_p_monster: Monster, _p_act: int) -> void:
-	await do_animation(Animations.ACT)
-	Global.display_text.emit(title + " did nothing...", true)
-	await Global.text_finished
-	do_animation(Animations.IDLE)
-	act_finished.emit()
+func do_act(p_monster: Monster, p_act: int) -> void:
+	var acts := get_acts(p_monster)
+	acts[p_act].do_act(self, p_monster)
 
 func set_selected(p_selected: bool) -> void:
 	if !mat:

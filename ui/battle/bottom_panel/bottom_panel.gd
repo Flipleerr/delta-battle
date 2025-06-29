@@ -52,7 +52,8 @@ var context := CONTEXT.BATTLE:
 				Global.characters[current_char].do_animation(Character.Animations.IDLE)
 			CONTEXT.ACT_SELECT:
 				$ActSelect.clear_items()
-				for act: Act in Global.characters[current_char].get_acts():
+				var acts := Global.characters[current_char].get_acts(Global.monsters[actions[current_char].to])
+				for act: Act in acts:
 					$ActSelect.add_item(act.title)
 			CONTEXT.MAGIC_SELECT:
 				$MagicSelect.clear_items()
@@ -98,7 +99,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if CONTEXT.MONSTER_SELECT <= context:
 			if context <= CONTEXT.CHAR_SELECT:
 				actions[current_char].to = menus[context].get_current_id()
-			elif context <= CONTEXT.ITEM_SELECT:
+			elif context <= CONTEXT.ACT_SELECT:
 				actions[current_char].specific = menus[context].get_current_id()
 		
 		match context:

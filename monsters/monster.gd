@@ -3,6 +3,8 @@ class_name Monster
 
 @export var title := ""
 @export_multiline var description := ""
+@export var acts: Array[Act] = []
+
 @export var current_hp := 100
 @export var max_hp := 100
 @export var strength := 0
@@ -72,3 +74,6 @@ func start_attack() -> float:
 
 func end_attack() -> void:
 	pass
+
+func get_acts() -> Array[Act]:
+	return acts
