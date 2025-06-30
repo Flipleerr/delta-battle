@@ -142,6 +142,11 @@ func use_item(p_character: Character, p_item: int) -> void:
 
 func do_spare(p_monster: Monster) -> void:
 	do_animation(Animations.SPARE)
+	if p_monster == null:
+		do_animation(Animations.IDLE)
+		spare_finished.emit()
+		return
+	
 	if p_monster.mercy_percent >= 1.0:
 		p_monster.spare()
 		await get_tree().create_timer(0.01).timeout
@@ -193,6 +198,12 @@ func heal(p_amount: int) -> void:
 	health_changed.emit(current_hp)
 
 func do_act(p_monster: Monster, p_act: int) -> void:
+	if p_monster == null:
+		await do_animation(Animations.ACT)
+		do_animation(Animations.IDLE)
+		act_finished.emit()
+		return
+	
 	var acts := get_acts(p_monster)
 	acts[p_act].do_act(self, p_monster)
 

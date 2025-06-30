@@ -229,39 +229,31 @@ func do_next_action() -> void:
 		current_char += 1
 		do_next_action()
 		return
-	match actions[current_char].what:
-		Global.FIGHT:
-			current_char += 1
-			do_next_action()
-			return
+	var action := actions[current_char]
+	var to := action.to
+	if action.what == Global.ACT or action.what == Global.SPARE:
+		var checked := 1
+		while Global.monsters[to] == null and checked <= Global.monsters.size():
+			to = (to + 1) % Global.monsters.size()
+			checked += 1
+	match action.what:
 		Global.ACT:
 			Global.characters[current_char].do_act(
-				Global.monsters[actions[current_char].to], actions[current_char].specific
+				Global.monsters[to], action.specific
 			)
 			await Global.characters[current_char].act_finished
-			current_char += 1
-			do_next_action()
-			return
 		Global.ITEM:
 			Global.characters[current_char].use_item(
-				Global.characters[actions[current_char].to], actions[current_char].specific
+				Global.characters[to], action.specific
 			)
 			await Global.characters[current_char].item_used
-			current_char += 1
-			do_next_action()
-			return
 		Global.SPARE:
 			Global.characters[current_char].do_spare(
-				Global.monsters[actions[current_char].to]
+				Global.monsters[to]
 			)
 			await Global.characters[current_char].spare_finished
-			current_char += 1
-			do_next_action()
-			return
-		Global.DEFEND:
-			current_char += 1
-			do_next_action()
-			return
+	current_char += 1
+	do_next_action()
 
 func do_attack(p_char_id: int, p_damage: int) -> void:
 	var monster := Global.monsters[actions[p_char_id].to]
