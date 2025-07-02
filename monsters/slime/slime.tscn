@@ -145,6 +145,9 @@ current_hp = 130
 max_hp = 130
 strength = 7
 defense = 3
+idle_lines = PackedStringArray("  * The ground is covered in slime...", "  * You feel like jumping around.", "  * The slime is bouncing around even [color=#000]----[/color]faster!", "  * Don\'t get slimed!", "  * The slime looks extra squishy...")
+opening_line_singular = "  * A slime bounced into battle!"
+opening_line_plural = "  * The slimes bounced into battle!"
 main_sprite = NodePath("Sprite")
 metadata/_custom_type_script = "uid://c7cl86f4gnd2b"
 

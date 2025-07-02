@@ -12,25 +12,19 @@ enum Animations {
 @export var max_hp := 1
 @export var strength := 0:
 	get():
-		var equipped_strength := 0
-		if weapon:
-			equipped_strength = weapon.attack
+		var equipped_strength := 0 if !weapon else weapon.attack
 		for armor: Equippable in armors:
 			equipped_strength += armor.attack
 		return strength + equipped_strength
 @export var defense := 0:
 	get():
-		var equipped_defense := 0
-		if weapon:
-			equipped_defense = weapon.defense
+		var equipped_defense := 0 if !weapon else weapon.defense
 		for armor: Equippable in armors:
 			equipped_defense += armor.defense
 		return defense + equipped_defense
 @export var magic := 0:
 	get():
-		var equipped_magic := 0
-		if weapon:
-			equipped_magic = weapon.magic
+		var equipped_magic := 0 if !weapon else weapon.magic
 		for armor: Equippable in armors:
 			equipped_magic += armor.magic
 		return magic + equipped_magic
@@ -39,18 +33,18 @@ enum Animations {
 @export_color_no_alpha var icon_color := Color.GRAY
 @export var icon: Texture2D = preload("res://ui/battle/char_menu/res/sample_char_icon.png")
 
+@export_node_path("Sprite2D") var main_sprite
+var sprite: Sprite2D
+var mat: ShaderMaterial
 var alive := true
 var defending := false
+var shake := 0.0
+
 signal health_changed(p_new_health: int)
 signal act_finished
 signal item_used
 signal spare_finished
 signal faint_finished
-
-@export_node_path("Sprite2D") var main_sprite
-var sprite: Sprite2D
-var mat: ShaderMaterial
-var shake := 0.0
 
 func _ready() -> void:
 	if !main_sprite:

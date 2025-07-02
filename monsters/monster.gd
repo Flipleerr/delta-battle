@@ -1,6 +1,10 @@
 extends Node2D
 class_name Monster
 
+enum Animations {
+	HURT, SPARE, FAINT
+}
+
 @export var title := ""
 @export_multiline var description := ""
 @export var acts: Array[Act] = []
@@ -10,11 +14,19 @@ class_name Monster
 @export var strength := 0
 @export var defense := 0
 
+@export var idle_lines: PackedStringArray
+@export_multiline var opening_line_singular := "  * An enemy approaches."
+@export_multiline var opening_line_plural := "  * Multiple enemies approach."
+
 @export_node_path("Sprite2D") var main_sprite
 var sprite: Sprite2D
 var mat: ShaderMaterial
+var hurting := false
 var dying := false
 var mercy_percent := 0.0
+var shake := 0.0
+
+var attacks: Array[Node2D] = []
 
 signal health_changed(p_new_health: float)
 signal mercy_changed(p_new_mercy: float)
@@ -29,11 +41,31 @@ func _ready() -> void:
 	mat.shader = preload("res://monsters/generic_monster.gdshader")
 	sprite.material = mat
 
+func _process(p_delta: float) -> void:
+	if shake > 0.0:
+		shake = lerpf(shake, 0.0, 1.0 - pow(0.1, p_delta))
+		sprite.position = Vector2(randf_range(-shake, shake), randf_range(-shake, shake))
+		if shake <= 0.1:
+			shake = 0.0
+			sprite.position = Vector2.ZERO
+
+func shake_sprite(amount: float) -> void:
+	shake = amount
+
+func do_animation(_p_animation: Animations) -> Signal:
+	return get_tree().create_timer(0.1).timeout
+
 func get_opening_line() -> String:
-	return ""
+	for monster: Monster in Global.monsters:
+		if monster == null or monster == self:
+			continue
+		return opening_line_plural
+	return opening_line_singular
 
 func get_idle_line() -> String:
-	return ""
+	if idle_lines.is_empty():
+		return "  * Keep fighting!"
+	return idle_lines[randi_range(0, idle_lines.size() - 1)]
 
 func set_selected(p_selected: bool) -> void:
 	if !mat:
@@ -41,7 +73,14 @@ func set_selected(p_selected: bool) -> void:
 	mat.set_shader_parameter("flash", float(p_selected))
 
 func damage_or_die_animation() -> void:
-	if dying:
+	if !dying:
+		hurting = true
+		await do_animation(Animations.HURT)
+		hurting = false
+	else:
+		await do_animation(Animations.HURT)
+		shake = 0.0
+		await do_animation(Animations.FAINT)
 		exit_finished.emit()
 		queue_free()
 
@@ -65,15 +104,26 @@ func create_text(p_text: String, p_color: Color) -> void:
 	get_tree().current_scene.add_child(new_text)
 
 func spare() -> void:
+	shake = 0.0
+	await do_animation(Animations.SPARE)
 	Global.delete_monster(self)
 	exit_finished.emit()
 	queue_free()
 
 func start_attack() -> float:
-	return 0.0
+	return 0.1
 
 func end_attack() -> void:
-	pass
+	for attack: Node2D in attacks:
+		if attack != null:
+			attack.queue_free()
+	attacks.clear()
+
+func instantiate_attack(scene: PackedScene) -> void:
+	var attack := scene.instantiate()
+	get_parent().add_child(attack)
+	attack.position = Global.CENTER
+	attacks.append(attack)
 
 func get_acts() -> Array[Act]:
 	return acts
