@@ -99,19 +99,16 @@ alignment = 1
 [node name="Char1" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Char2")
-capitalize = true
 
 [node name="Char2" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Char1")
 focus_neighbor_bottom = NodePath("../Char3")
-capitalize = true
 
 [node name="Char3" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Char2")
 focus_neighbor_bottom = NodePath("../../Back")
-capitalize = true
 
 [node name="Back" type="Button" parent="Characters"]
 custom_minimum_size = Vector2(400, 0)
@@ -149,19 +146,16 @@ alignment = 1
 [node name="Enemy1" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Enemy2")
-capitalize = true
 
 [node name="Enemy2" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Enemy1")
 focus_neighbor_bottom = NodePath("../Enemy3")
-capitalize = true
 
 [node name="Enemy3" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Enemy2")
 focus_neighbor_bottom = NodePath("../../Back")
-capitalize = true
 
 [node name="Back" type="Button" parent="Enemies"]
 custom_minimum_size = Vector2(400, 0)
@@ -210,7 +204,6 @@ vertical_alignment = 1
 [node name="Weapon" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Armor1")
-capitalize = true
 
 [node name="ArmorLabel" type="Label" parent="Equipment/VBox"]
 custom_minimum_size = Vector2(640, 0)
@@ -226,13 +219,11 @@ vertical_alignment = 1
 layout_mode = 2
 focus_neighbor_top = NodePath("../Weapon")
 focus_neighbor_bottom = NodePath("../Armor2")
-capitalize = true
 
 [node name="Armor2" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Armor1")
 focus_neighbor_bottom = NodePath("../../Back")
-capitalize = true
 
 [node name="Back" type="Button" parent="Equipment"]
 custom_minimum_size = Vector2(400, 0)

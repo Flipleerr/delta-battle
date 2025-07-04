@@ -6,11 +6,7 @@ var option := 0:
 	set(p_option):
 		option = wrapi(p_option, 0, options.size())
 		if $HBox/Label:
-			if capitalize:
-				$HBox/Label.text = options[option].to_upper()
-			else:
-				$HBox/Label.text = options[option]
-@export var capitalize := false
+			$HBox/Label.text = options[option]
 
 func _ready() -> void:
 	option = option
