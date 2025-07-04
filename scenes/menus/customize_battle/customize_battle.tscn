@@ -1,11 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://chubr6fl27jfm"]
+[gd_scene load_steps=10 format=3 uid="uid://chubr6fl27jfm"]
 
 [ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="1_21myx"]
 [ext_resource type="Script" uid="uid://uo1143gkpip7" path="res://scenes/menus/customize_battle/customize_battle.gd" id="1_myn3y"]
+[ext_resource type="Script" uid="uid://cbtfclefu13k7" path="res://equippables/equippable.gd" id="2_g0rt7"]
 [ext_resource type="PackedScene" uid="uid://b268fklbbaj1q" path="res://ui/custom_spin_box/custom_spin_box.tscn" id="2_p2nvh"]
+[ext_resource type="Resource" uid="uid://c4gdp8ayox0il" path="res://equippables/weapons/wood_blade.tres" id="3_slti3"]
+[ext_resource type="Resource" uid="uid://c7jk071pogimy" path="res://equippables/armors/amber_card.tres" id="3_u5orj"]
+[ext_resource type="Resource" uid="uid://diunmk8v3dbjq" path="res://equippables/weapons/spooky_sword.tres" id="4_hsrc4"]
+[ext_resource type="Resource" uid="uid://bmxitgvjg0ble" path="res://equippables/armors/iron_shackle.tres" id="4_slti3"]
+[ext_resource type="Resource" uid="uid://c0yrdiysbiq0i" path="res://equippables/armors/white_ribbon.tres" id="5_hsrc4"]
 
 [node name="CustomizeBattle" type="Node2D"]
 script = ExtResource("1_myn3y")
+weapons = Array[ExtResource("2_g0rt7")]([ExtResource("3_slti3"), ExtResource("4_hsrc4")])
+armors = Array[ExtResource("2_g0rt7")]([ExtResource("3_u5orj"), ExtResource("4_slti3"), ExtResource("5_hsrc4")])
 
 [node name="Main" type="Node2D" parent="."]
 
@@ -91,19 +99,19 @@ alignment = 1
 [node name="Char1" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Char2")
-options = ["NONE", "BLUE"]
+capitalize = true
 
 [node name="Char2" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Char1")
 focus_neighbor_bottom = NodePath("../Char3")
-options = ["NONE", "BLUE"]
+capitalize = true
 
 [node name="Char3" parent="Characters/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Char2")
 focus_neighbor_bottom = NodePath("../../Back")
-options = ["NONE", "BLUE"]
+capitalize = true
 
 [node name="Back" type="Button" parent="Characters"]
 custom_minimum_size = Vector2(400, 0)
@@ -141,19 +149,19 @@ alignment = 1
 [node name="Enemy1" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Enemy2")
-options = ["NONE", "SLIME"]
+capitalize = true
 
 [node name="Enemy2" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Enemy1")
 focus_neighbor_bottom = NodePath("../Enemy3")
-options = ["NONE", "SLIME"]
+capitalize = true
 
 [node name="Enemy3" parent="Enemies/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Enemy2")
 focus_neighbor_bottom = NodePath("../../Back")
-options = ["NONE", "SLIME"]
+capitalize = true
 
 [node name="Back" type="Button" parent="Enemies"]
 custom_minimum_size = Vector2(400, 0)
@@ -202,7 +210,7 @@ vertical_alignment = 1
 [node name="Weapon" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Armor1")
-options = ["NONE", "WOOD BLADE", "SPOOKY SWORD"]
+capitalize = true
 
 [node name="ArmorLabel" type="Label" parent="Equipment/VBox"]
 custom_minimum_size = Vector2(640, 0)
@@ -218,13 +226,13 @@ vertical_alignment = 1
 layout_mode = 2
 focus_neighbor_top = NodePath("../Weapon")
 focus_neighbor_bottom = NodePath("../Armor2")
-options = ["NONE", "AMBER CARD", "IRON SHACKLE", "WHITE RIBBON"]
+capitalize = true
 
 [node name="Armor2" parent="Equipment/VBox" instance=ExtResource("2_p2nvh")]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Armor1")
 focus_neighbor_bottom = NodePath("../../Back")
-options = ["NONE", "AMBER CARD", "IRON SHACKLE", "WHITE RIBBON"]
+capitalize = true
 
 [node name="Back" type="Button" parent="Equipment"]
 custom_minimum_size = Vector2(400, 0)
