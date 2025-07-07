@@ -176,13 +176,13 @@ func hurt(p_damage: int) -> void:
 	health_changed.emit(current_hp)
 	create_text(str(p_damage), Color.WHITE)
 	Sounds.play("snd_hurt1")
-	if current_hp < 0:
+	if current_hp <= 0:
 		faint()
 
 func heal(p_amount: int) -> void:
 	current_hp += p_amount
 	Sounds.play("snd_power")
-	if !alive and current_hp > 0:
+	if !alive and current_hp >= 0:
 		revive()
 	if current_hp >= max_hp:
 		current_hp = max_hp
