@@ -5,10 +5,6 @@ class_name Act
 @export_multiline var text := "  * Nothing happened."
 @export_range(0, 100) var spare_percent := 0
 
-#func _init(p_title: String) -> void:
-	#if title != "":
-		#title = p_title
-
 func do_act(p_from: Character, p_to: Monster):
 	await p_from.do_animation(Character.Animations.ACT)
 	Global.display_text.emit(text, true)

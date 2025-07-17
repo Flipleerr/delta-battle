@@ -40,8 +40,12 @@ var alive := true
 var defending := false
 var shake := 0.0
 
+## The list of default spells the character can use. Only for characters with do_magic set to true.
+@export var spells: Array[Spell] = []
+
 signal health_changed(p_new_health: int)
 signal act_finished
+signal spell_finished
 signal item_used
 signal spare_finished
 signal faint_finished
@@ -85,12 +89,8 @@ func get_acts(p_monster: Monster) -> Array[Act]:
 	
 	return acts
 
-## Override function
 func get_spells() -> Array[Spell]:
-	var nothing := Spell.new()
-	nothing.title = "Nothing spell"
-	nothing.tp_cost = 15
-	return [nothing]
+	return spells if !spells.is_empty() else [Spell.new()]
 
 func prep_attack() -> void:
 	do_animation(Animations.PREP_ATTACK)
@@ -200,6 +200,15 @@ func do_act(p_monster: Monster, p_act: int) -> void:
 	
 	var acts := get_acts(p_monster)
 	acts[p_act].do_act(self, p_monster)
+
+func do_spell(p_entity: Node2D, p_spell: Spell) -> void:
+	if p_entity == null:
+		await do_animation(Animations.ACT)
+		do_animation(Animations.IDLE)
+		act_finished.emit()
+		return
+	
+	p_spell.do_spell(self, p_entity)
 
 func set_selected(p_selected: bool) -> void:
 	if !mat:

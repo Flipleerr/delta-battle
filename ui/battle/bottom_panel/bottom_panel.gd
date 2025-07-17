@@ -58,7 +58,7 @@ var context := CONTEXT.BATTLE:
 			CONTEXT.MAGIC_SELECT:
 				$MagicSelect.clear_items()
 				for spell: Spell in Global.characters[current_char].get_spells():
-					$MagicSelect.add_item(spell.title, spell.description, spell.tp_cost)
+					$MagicSelect.add_item(spell.title, spell.description, spell.tp_percent_cost)
 			CONTEXT.ACTION:
 				$TextBox.hide_text()
 				for char_menu: CharMenu in char_menus:
@@ -99,7 +99,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		if CONTEXT.MONSTER_SELECT <= context:
 			if context <= CONTEXT.CHAR_SELECT:
 				actions[current_char].to = menus[context].get_current_id()
-			elif context <= CONTEXT.ACT_SELECT:
+			elif context <= CONTEXT.MAGIC_SELECT:
 				actions[current_char].specific = menus[context].get_current_id()
 		
 		match context:
@@ -107,9 +107,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				queue_character_action()
 				return
 			CONTEXT.MONSTER_SELECT:
-				if actions[current_char].what == Global.ACT and !char_menus[current_char].uses_magic:
-					context = CONTEXT.ACT_SELECT
-					return
+				if actions[current_char].what == Global.ACT:
+					if !char_menus[current_char].uses_magic:
+						context = CONTEXT.ACT_SELECT
+						return
+					else:
+						next_char()
+						return
 				if actions[current_char].what == Global.SPARE:
 					Global.characters[current_char].prep_spare()
 					next_char()
@@ -118,7 +122,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				next_char()
 				return
 			CONTEXT.CHAR_SELECT:
-				Global.characters[current_char].prep_item()
+				if actions[current_char].what != Global.ACT or !char_menus[current_char].uses_magic:
+					Global.characters[current_char].prep_item()
 				next_char()
 				return
 			CONTEXT.ACT_SELECT:
@@ -126,8 +131,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				next_char()
 				return
 			CONTEXT.MAGIC_SELECT:
+				var spells := Global.characters[current_char].get_spells()
+				var spell := spells[menus[CONTEXT.MAGIC_SELECT].get_current_id()]
+				var tp_cost := Global.tp_percent_to_absolute(spell.tp_percent_cost)
+				
+				if tp_cost > Global.tp:
+					return
+				
+				Global.tp -= tp_cost
+				context = CONTEXT.CHAR_SELECT if spell.target == 0 else CONTEXT.MONSTER_SELECT
 				Global.characters[current_char].prep_act()
-				next_char()
 				return
 			CONTEXT.ITEM_SELECT:
 				context = CONTEXT.CHAR_SELECT
@@ -143,16 +156,35 @@ func undo_input() -> void:
 			current_char -= 1
 			if actions[current_char].what == Global.ITEM:
 				$ItemSelect.show_item(actions[current_char].specific, true)
+			elif actions[current_char].what == Global.ACT:
+				if Global.characters[current_char].uses_magic:
+					var spells := Global.characters[current_char].get_spells()
+					var spell := spells[menus[CONTEXT.MAGIC_SELECT].get_current_id()]
+					var tp_cost := Global.tp_percent_to_absolute(spell.tp_percent_cost)
+					Global.tp += tp_cost
+			elif actions[current_char].what == Global.DEFEND:
+				Global.tp -= 40
 			char_menus[current_char].activate()
 			char_menus[current_char].deconfirm_action()
 			Global.characters[current_char].do_animation(Character.Animations.IDLE)
 			return
-		CONTEXT.CHAR_SELECT:
-			$ItemSelect.show_item(actions[current_char].specific, true)
+		CONTEXT.CHAR_SELECT, CONTEXT.MONSTER_SELECT:
+			if actions[current_char].what == Global.ITEM:
+				$ItemSelect.show_item(actions[current_char].specific, true)
+				context = CONTEXT.CHAR_MENU
+				return
+			if actions[current_char].what == Global.ACT and char_menus[current_char].uses_magic:
+				var spells := Global.characters[current_char].get_spells()
+				var spell := spells[menus[CONTEXT.MAGIC_SELECT].get_current_id()]
+				var tp_cost := Global.tp_percent_to_absolute(spell.tp_percent_cost)
+				
+				Global.tp += tp_cost
+				context = CONTEXT.MAGIC_SELECT
+				return
 		CONTEXT.ACT_SELECT:
 			context = CONTEXT.MONSTER_SELECT
 			return
-	if CONTEXT.MONSTER_SELECT <= context and context <= CONTEXT.ITEM_SELECT:
+	if (CONTEXT.MONSTER_SELECT <= context and context <= CONTEXT.ITEM_SELECT) or context == CONTEXT.MAGIC_SELECT:
 		context = CONTEXT.CHAR_MENU
 
 func queue_character_action() -> void:
@@ -176,6 +208,7 @@ func queue_character_action() -> void:
 		Global.DEFEND:
 			actions[current_char].what = Global.DEFEND
 			Global.characters[current_char].defend()
+			Global.tp += 40
 			next_char()
 
 func next_char() -> void:
@@ -230,6 +263,7 @@ func do_next_action() -> void:
 		do_next_action()
 		return
 	var action := actions[current_char]
+	var does_magic := Global.characters[current_char].uses_magic
 	var to := action.to
 	if action.what == Global.ACT or action.what == Global.SPARE:
 		var checked := 1
@@ -238,10 +272,18 @@ func do_next_action() -> void:
 			checked += 1
 	match action.what:
 		Global.ACT:
-			Global.characters[current_char].do_act(
-				Global.monsters[to], action.specific
-			)
-			await Global.characters[current_char].act_finished
+			if !does_magic:
+				Global.characters[current_char].do_act(
+					Global.monsters[to], action.specific
+				)
+				await Global.characters[current_char].act_finished
+			else:
+				var spell := Global.characters[current_char].get_spells()[action.specific]
+				var entity := Global.characters[to] as Node2D if spell.target == 0 else Global.monsters[to] as Node2D
+				Global.characters[current_char].do_spell(
+					entity, spell
+				)
+				await Global.characters[current_char].spell_finished
 		Global.ITEM:
 			Global.characters[current_char].use_item(
 				Global.characters[to], action.specific

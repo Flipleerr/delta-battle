@@ -26,9 +26,10 @@ var can_spare := false:
 		actions[Global.SPARE].flashing = can_spare
 var uses_magic := false:
 	set(p_uses_magic):
-		actions[Global.ACT] = $Actions/Magic
-		$Actions/Magic.visible = true
-		$Actions/Act.visible = false
+		uses_magic = p_uses_magic
+		actions[Global.ACT] = $Actions/Magic if uses_magic else $Actions/Act
+		$Actions/Magic.visible = uses_magic
+		$Actions/Act.visible = !uses_magic
 
 var activated := false:
 	set(p_activated):
@@ -93,6 +94,9 @@ func set_from_character(character: Character) -> void:
 	$Stats/ActionIcon.modulate = character.icon_color
 	$Actions/BGLineAnimation.modulate = character.main_color
 	character.health_changed.connect(set_current_health)
+	
+	await ready
+	uses_magic = character.uses_magic
 
 func activate():
 	$Cover1.visible = false

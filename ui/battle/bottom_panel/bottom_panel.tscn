@@ -37,7 +37,7 @@ show_description = false
 
 [node name="MagicSelect" parent="." instance=ExtResource("4_11je6")]
 visible = false
-show_description = false
+show_tp = true
 
 [node name="AttackTiming" parent="." instance=ExtResource("5_y2sg7")]
 visible = false

@@ -99,7 +99,7 @@ sprite = 1
 [node name="Magic" parent="Actions" instance=ExtResource("2_an0ot")]
 visible = false
 self_modulate = Color(1, 0.498039, 0.152941, 1)
-position = Vector2(65, 16)
+position = Vector2(68, 16)
 region_rect = Rect2(62, 0, 31, 26)
 sprite = 2
 

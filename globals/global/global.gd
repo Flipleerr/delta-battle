@@ -22,6 +22,9 @@ var characters: Array[Character] = []
 var monsters: Array[Monster] = []
 var items: Array[Item] = []
 
+func tp_percent_to_absolute(p_percent: float) -> float:
+	return p_percent / 100.0 * 250.0
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	process_mode = Node.PROCESS_MODE_ALWAYS

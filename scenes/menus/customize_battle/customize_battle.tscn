@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://chubr6fl27jfm"]
+[gd_scene load_steps=12 format=3 uid="uid://chubr6fl27jfm"]
 
 [ext_resource type="Texture2D" uid="uid://b0mx4qepjjvn" path="res://globals/global/res/heart.png" id="1_21myx"]
 [ext_resource type="Script" uid="uid://uo1143gkpip7" path="res://scenes/menus/customize_battle/customize_battle.gd" id="1_myn3y"]
+[ext_resource type="PackedScene" uid="uid://koaov6uan8c3" path="res://characters/blue/blue.tscn" id="2_2i0nk"]
 [ext_resource type="Script" uid="uid://cbtfclefu13k7" path="res://equippables/equippable.gd" id="2_g0rt7"]
 [ext_resource type="PackedScene" uid="uid://b268fklbbaj1q" path="res://ui/custom_spin_box/custom_spin_box.tscn" id="2_p2nvh"]
+[ext_resource type="PackedScene" uid="uid://s3b8ossymlfv" path="res://characters/red/red.tscn" id="3_pggh3"]
 [ext_resource type="Resource" uid="uid://c4gdp8ayox0il" path="res://equippables/weapons/wood_blade.tres" id="3_slti3"]
 [ext_resource type="Resource" uid="uid://c7jk071pogimy" path="res://equippables/armors/amber_card.tres" id="3_u5orj"]
 [ext_resource type="Resource" uid="uid://diunmk8v3dbjq" path="res://equippables/weapons/spooky_sword.tres" id="4_hsrc4"]
@@ -12,6 +14,7 @@
 
 [node name="CustomizeBattle" type="Node2D"]
 script = ExtResource("1_myn3y")
+characters = Array[PackedScene]([ExtResource("2_2i0nk"), ExtResource("3_pggh3")])
 weapons = Array[ExtResource("2_g0rt7")]([ExtResource("3_slti3"), ExtResource("4_hsrc4")])
 armors = Array[ExtResource("2_g0rt7")]([ExtResource("3_u5orj"), ExtResource("4_slti3"), ExtResource("5_hsrc4")])
 
