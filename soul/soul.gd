@@ -44,7 +44,7 @@ func _on_tp_range_area_exited(p_area: Area2D) -> void:
 
 func graze(p_pellet: Pellet, p_delta: float) -> void:
 	if p_pellet.grazed:
-		Global.tp += 30.0 * p_delta * p_pellet.graze_points / 20.0
+		Global.tp += 30.0 * p_delta * p_pellet.graze_points * Global.tp_coefficient / 20.0
 		if get_parent().turn_timer >= 1.0 / 3.0:
 			get_parent().turn_timer -= 30.0 * p_delta * p_pellet.time_points / 20.0
 		if graze_timer >= 0.0 and graze_timer < 4.0 / 30.0:
