@@ -172,7 +172,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n3lcv"]
-size = Vector2(16.5, 9)
+size = Vector2(17.75, 37.5)
 
 [node name="Overworld" type="Node2D"]
 
@@ -187,8 +187,10 @@ frame = 2
 frame_progress = 0.813298
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OverworldChar"]
-position = Vector2(0, 13.5)
+position = Vector2(0.625, -0.75)
 shape = SubResource("RectangleShape2D_n3lcv")
+
+[node name="Camera2D" type="Camera2D" parent="OverworldChar"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -4
